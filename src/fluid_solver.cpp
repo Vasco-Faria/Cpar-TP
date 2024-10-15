@@ -53,24 +53,42 @@ void set_bnd(int M, int N, int O, int b, float *x) {
                                     x[IX(M + 1, N + 1, 1)]);
 }
 
+
 // Linear solve for implicit methods (diffusion)
-void lin_solve(int M, int N, int O, int b, float *x, float *x0, float a,
-               float c) {
-  for (int l = 0; l < LINEARSOLVERTIMES; l++) {
-    for (int i = 1; i <= M; i++) {
-      for (int j = 1; j <= N; j++) {
-        for (int k = 1; k <= O; k++) {
-          x[IX(i, j, k)] = (x0[IX(i, j, k)] +
-                            a * (x[IX(i - 1, j, k)] + x[IX(i + 1, j, k)] +
-                                 x[IX(i, j - 1, k)] + x[IX(i, j + 1, k)] +
-                                 x[IX(i, j, k - 1)] + x[IX(i, j, k + 1)])) /
-                           c;
+void lin_solve(int M, int N, int O, int b, float *x, float *x0, float a, float c) {
+    float tolerance = 1e-5f;  
+    int check_frequency = 5;  
+
+    for (int l = 0; l < LINEARSOLVERTIMES; l++) {
+        float max_diff = 0.0f;
+
+        // Iterate over the grid
+        for (int i = 1; i <= M; i++) {
+            for (int j = 1; j <= N; j++) {
+                for (int k = 1; k <= O; k++) {
+                    int idx = IX(i, j, k);
+                    float x_old = x[idx];
+                    x[idx] = (x0[IX(i, j, k)] +
+                              a * (x[IX(i - 1, j, k)] + x[IX(i + 1, j, k)] +
+                                   x[IX(i, j - 1, k)] + x[IX(i, j + 1, k)] +
+                                   x[IX(i, j, k - 1)] + x[IX(i, j, k + 1)])) / c;
+
+                    if (l % check_frequency == 0) {
+                        max_diff = fmaxf(max_diff, fabsf(x[idx] - x_old));
+                    }
+                }
+            }
         }
-      }
+        set_bnd(M, N, O, b, x);
+
+        if (l % check_frequency == 0 && max_diff < tolerance) {
+            break;
+        }
     }
-    set_bnd(M, N, O, b, x);
-  }
 }
+
+
+
 
 // Diffusion step (uses implicit method)
 void diffuse(int M, int N, int O, int b, float *x, float *x0, float diff,

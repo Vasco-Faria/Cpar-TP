@@ -1,0 +1,814 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 73.89      4.50     4.50      600     0.01     0.01  lin_solve(int, int, int, int, float*, float*, float, float)
+ 13.79      5.34     0.84      400     0.00     0.00  advect(int, int, int, int, float*, float*, float*, float*, float*, float)
+  7.55      5.80     0.46      200     0.00     0.01  project(int, int, int, float*, float*, float*, float*, float*)
+  3.12      5.99     0.19     6239     0.00     0.00  set_bnd(int, int, int, int, float*)
+  0.99      6.05     0.06      400     0.00     0.00  add_source(int, int, int, float*, float*, float)
+  0.66      6.09     0.04                             _init
+  0.00      6.09     0.00     4440     0.00     0.00  __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::base() const
+  0.00      6.09     0.00     2220     0.00     0.00  bool __gnu_cxx::operator!=<Event const*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > > const&)
+  0.00      6.09     0.00     2020     0.00     0.00  __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::operator++()
+  0.00      6.09     0.00     2020     0.00     0.00  __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::operator*() const
+  0.00      6.09     0.00      400     0.00     0.01  diffuse(int, int, int, int, float*, float*, float, float)
+  0.00      6.09     0.00      400     0.00     0.00  __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::__normal_iterator(Event const* const&)
+  0.00      6.09     0.00      200     0.00     0.00  std::vector<Event, std::allocator<Event> >::end() const
+  0.00      6.09     0.00      200     0.00     0.00  std::vector<Event, std::allocator<Event> >::begin() const
+  0.00      6.09     0.00      186     0.00     0.00  int& std::forward<int&>(std::remove_reference<int&>::type&)
+  0.00      6.09     0.00      156     0.00     0.00  Event* std::__niter_base<Event*>(Event*)
+  0.00      6.09     0.00      153     0.00     0.00  std::_Vector_base<Event, std::allocator<Event> >::_M_get_Tp_allocator()
+  0.00      6.09     0.00      127     0.00     0.00  std::_Vector_base<Event, std::allocator<Event> >::_M_deallocate(Event*, unsigned long)
+  0.00      6.09     0.00      104     0.00     0.00  __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::base() const
+  0.00      6.09     0.00      104     0.00     0.00  std::vector<Event, std::allocator<Event> >::size() const
+  0.00      6.09     0.00      101     0.00     0.00  __gnu_cxx::new_allocator<Event>::new_allocator()
+  0.00      6.09     0.00      101     0.00     0.00  __gnu_cxx::new_allocator<Event>::~new_allocator()
+  0.00      6.09     0.00      101     0.00     0.00  std::allocator<Event>::allocator()
+  0.00      6.09     0.00      101     0.00     0.00  std::allocator<Event>::~allocator()
+  0.00      6.09     0.00      101     0.00     0.00  void std::_Destroy_aux<true>::__destroy<Event*>(Event*, Event*)
+  0.00      6.09     0.00      101     0.00     0.00  std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl::_Vector_impl()
+  0.00      6.09     0.00      101     0.00     0.00  std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl::~_Vector_impl()
+  0.00      6.09     0.00      101     0.00     0.00  std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl_data::_Vector_impl_data()
+  0.00      6.09     0.00      101     0.00     0.00  std::_Vector_base<Event, std::allocator<Event> >::_Vector_base()
+  0.00      6.09     0.00      101     0.00     0.00  std::_Vector_base<Event, std::allocator<Event> >::~_Vector_base()
+  0.00      6.09     0.00      101     0.00     0.00  std::vector<Event, std::allocator<Event> >::vector()
+  0.00      6.09     0.00      101     0.00     0.00  std::vector<Event, std::allocator<Event> >::~vector()
+  0.00      6.09     0.00      101     0.00     0.00  void std::_Destroy<Event*>(Event*, Event*)
+  0.00      6.09     0.00      101     0.00     0.00  void std::_Destroy<Event*, Event>(Event*, Event*, std::allocator<Event>&)
+  0.00      6.09     0.00      100     0.00     0.00  apply_events(std::vector<Event, std::allocator<Event> > const&)
+  0.00      6.09     0.00      100     0.00     0.05  vel_step(int, int, int, float*, float*, float*, float*, float*, float*, float, float)
+  0.00      6.09     0.00      100     0.00     0.01  dens_step(int, int, int, float*, float*, float*, float*, float*, float, float)
+  0.00      6.09     0.00      100     0.00     0.00  EventManager::get_events_at_timestamp(int) const
+  0.00      6.09     0.00       96     0.00     0.00  Event* std::__addressof<Event>(Event&)
+  0.00      6.09     0.00       92     0.00     0.00  __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::__normal_iterator(Event* const&)
+  0.00      6.09     0.00       78     0.00     0.00  __gnu_cxx::new_allocator<Event>::_M_max_size() const
+  0.00      6.09     0.00       72     0.00     0.00  operator new(unsigned long, void*)
+  0.00      6.09     0.00       64     0.00     0.00  Event&& std::forward<Event>(std::remove_reference<Event>::type&)
+  0.00      6.09     0.00       60     0.00     0.00  Event const& std::forward<Event const&>(std::remove_reference<Event const&>::type&)
+  0.00      6.09     0.00       52     0.00     0.00  __gnu_cxx::new_allocator<Event>::max_size() const
+  0.00      6.09     0.00       52     0.00     0.00  std::_Vector_base<Event, std::allocator<Event> >::_M_get_Tp_allocator() const
+  0.00      6.09     0.00       52     0.00     0.00  std::vector<Event, std::allocator<Event> >::max_size() const
+  0.00      6.09     0.00       52     0.00     0.00  std::allocator_traits<std::allocator<Event> >::max_size(std::allocator<Event> const&)
+  0.00      6.09     0.00       52     0.00     0.00  std::vector<Event, std::allocator<Event> >::_S_max_size(std::allocator<Event> const&)
+  0.00      6.09     0.00       52     0.00     0.00  std::vector<Event, std::allocator<Event> >::_S_relocate(Event*, Event*, Event*, std::allocator<Event>&)
+  0.00      6.09     0.00       52     0.00     0.00  std::vector<Event, std::allocator<Event> >::_S_do_relocate(Event*, Event*, Event*, std::allocator<Event>&, std::integral_constant<bool, true>)
+  0.00      6.09     0.00       52     0.00     0.00  Event* std::__relocate_a<Event*, Event*, std::allocator<Event> >(Event*, Event*, Event*, std::allocator<Event>&)
+  0.00      6.09     0.00       52     0.00     0.00  Event* std::__relocate_a_1<Event*, Event*, std::allocator<Event> >(Event*, Event*, Event*, std::allocator<Event>&)
+  0.00      6.09     0.00       52     0.00     0.00  unsigned long const& std::min<unsigned long>(unsigned long const&, unsigned long const&)
+  0.00      6.09     0.00       46     0.00     0.00  std::vector<Event, std::allocator<Event> >::end()
+  0.00      6.09     0.00       32     0.00     0.00  void __gnu_cxx::new_allocator<Event>::destroy<Event>(Event*)
+  0.00      6.09     0.00       32     0.00     0.00  void __gnu_cxx::new_allocator<Event>::construct<Event, Event>(Event*, Event&&)
+  0.00      6.09     0.00       32     0.00     0.00  void std::allocator_traits<std::allocator<Event> >::destroy<Event>(std::allocator<Event>&, Event*)
+  0.00      6.09     0.00       32     0.00     0.00  void std::allocator_traits<std::allocator<Event> >::construct<Event, Event>(std::allocator<Event>&, Event*, Event&&)
+  0.00      6.09     0.00       32     0.00     0.00  void std::__relocate_object_a<Event, Event, std::allocator<Event> >(Event*, Event*, std::allocator<Event>&)
+  0.00      6.09     0.00       32     0.00     0.00  std::remove_reference<Event&>::type&& std::move<Event&>(Event&)
+  0.00      6.09     0.00       28     0.00     0.00  bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  0.00      6.09     0.00       26     0.00     0.00  __gnu_cxx::new_allocator<Event>::deallocate(Event*, unsigned long)
+  0.00      6.09     0.00       26     0.00     0.00  __gnu_cxx::new_allocator<Event>::allocate(unsigned long, void const*)
+  0.00      6.09     0.00       26     0.00     0.00  __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::difference_type __gnu_cxx::operator-<Event*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&)
+  0.00      6.09     0.00       26     0.00     0.00  std::vector<Event, std::allocator<Event> >::_M_check_len(unsigned long, char const*) const
+  0.00      6.09     0.00       26     0.00     0.00  std::_Vector_base<Event, std::allocator<Event> >::_M_allocate(unsigned long)
+  0.00      6.09     0.00       26     0.00     0.00  std::allocator_traits<std::allocator<Event> >::deallocate(std::allocator<Event>&, Event*, unsigned long)
+  0.00      6.09     0.00       26     0.00     0.00  std::allocator_traits<std::allocator<Event> >::allocate(std::allocator<Event>&, unsigned long)
+  0.00      6.09     0.00       26     0.00     0.00  std::vector<Event, std::allocator<Event> >::begin()
+  0.00      6.09     0.00       26     0.00     0.00  unsigned long const& std::max<unsigned long>(unsigned long const&, unsigned long const&)
+  0.00      6.09     0.00       20     0.00     0.00  void __gnu_cxx::new_allocator<Event>::construct<Event, Event const&>(Event*, Event const&)
+  0.00      6.09     0.00       20     0.00     0.00  __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::operator*() const
+  0.00      6.09     0.00       20     0.00     0.00  __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::operator-(long) const
+  0.00      6.09     0.00       20     0.00     0.00  void std::allocator_traits<std::allocator<Event> >::construct<Event, Event const&>(std::allocator<Event>&, Event*, Event const&)
+  0.00      6.09     0.00       20     0.00     0.00  void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&)
+  0.00      6.09     0.00       20     0.00     0.00  std::vector<Event, std::allocator<Event> >::back()
+  0.00      6.09     0.00       20     0.00     0.00  std::vector<Event, std::allocator<Event> >::push_back(Event const&)
+  0.00      6.09     0.00       12     0.00     0.00  Event::Event(int, int)
+  0.00      6.09     0.00       12     0.00     0.00  void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&>(Event*, int&, int&)
+  0.00      6.09     0.00       12     0.00     0.00  void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&>(std::allocator<Event>&, Event*, int&, int&)
+  0.00      6.09     0.00       12     0.00     0.00  Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&>(int&, int&)
+  0.00      6.09     0.00        8     0.00     0.00  Event::Event(int, int, int, int)
+  0.00      6.09     0.00        8     0.00     0.00  void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&, int&, int&>(Event*, int&, int&, int&, int&)
+  0.00      6.09     0.00        8     0.00     0.00  void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&, int&, int&>(std::allocator<Event>&, Event*, int&, int&, int&, int&)
+  0.00      6.09     0.00        8     0.00     0.00  Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&, int&, int&>(int&, int&, int&, int&)
+  0.00      6.09     0.00        3     0.00     0.00  void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&)
+  0.00      6.09     0.00        3     0.00     0.00  void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&)
+  0.00      6.09     0.00        1     0.00     0.00  clear_data()
+  0.00      6.09     0.00        1     0.00     0.00  sum_density()
+  0.00      6.09     0.00        1     0.00     0.00  allocate_data()
+  0.00      6.09     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      6.09     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      6.09     0.00        1     0.00     6.05  simulate(EventManager&, int)
+  0.00      6.09     0.00        1     0.00     0.00  free_data()
+  0.00      6.09     0.00        1     0.00     0.00  EventManager::read_events(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+  0.00      6.09     0.00        1     0.00     0.00  EventManager::EventManager()
+  0.00      6.09     0.00        1     0.00     0.00  EventManager::~EventManager()
+  0.00      6.09     0.00        1     0.00     0.00  bool __gnu_cxx::__is_null_pointer<char const>(char const*)
+  0.00      6.09     0.00        1     0.00     0.00  EventManager::get_total_timesteps() const
+  0.00      6.09     0.00        1     0.00     0.00  std::char_traits<char>::length(char const*)
+  0.00      6.09     0.00        1     0.00     0.00  void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)
+  0.00      6.09     0.00        1     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&)
+  0.00      6.09     0.00        1     0.00     0.00  std::iterator_traits<char const*>::difference_type std::__distance<char const*>(char const*, char const*, std::random_access_iterator_tag)
+  0.00      6.09     0.00        1     0.00     0.00  std::iterator_traits<char const*>::iterator_category std::__iterator_category<char const*>(char const* const&)
+  0.00      6.09     0.00        1     0.00     0.00  std::iterator_traits<char const*>::difference_type std::distance<char const*>(char const*, char const*)
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) for 0.16% of 6.09 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     99.3    0.00    6.05                 main [1]
+                0.00    6.05       1/1           simulate(EventManager&, int) [2]
+                0.00    0.00       1/1           EventManager::EventManager() [104]
+                0.00    0.00       1/1           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [110]
+                0.00    0.00       1/1           EventManager::read_events(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [103]
+                0.00    0.00       1/1           allocate_data() [99]
+                0.00    0.00       1/1           EventManager::get_total_timesteps() const [107]
+                0.00    0.00       1/1           clear_data() [97]
+                0.00    0.00       1/1           sum_density() [98]
+                0.00    0.00       1/1           free_data() [102]
+                0.00    0.00       1/1           EventManager::~EventManager() [105]
+-----------------------------------------------
+                0.00    6.05       1/1           main [1]
+[2]     99.3    0.00    6.05       1         simulate(EventManager&, int) [2]
+                0.00    5.05     100/100         vel_step(int, int, int, float*, float*, float*, float*, float*, float*, float, float) [3]
+                0.00    1.00     100/100         dens_step(int, int, int, float*, float*, float*, float*, float*, float, float) [7]
+                0.00    0.00     100/100         EventManager::get_events_at_timestamp(int) const [46]
+                0.00    0.00     100/100         apply_events(std::vector<Event, std::allocator<Event> > const&) [45]
+                0.00    0.00     100/101         std::vector<Event, std::allocator<Event> >::~vector() [42]
+-----------------------------------------------
+                0.00    5.05     100/100         simulate(EventManager&, int) [2]
+[3]     82.9    0.00    5.05     100         vel_step(int, int, int, float*, float*, float*, float*, float*, float*, float, float) [3]
+                0.00    2.32     300/400         diffuse(int, int, int, int, float*, float*, float, float) [5]
+                0.46    1.58     200/200         project(int, int, int, float*, float*, float*, float*, float*) [6]
+                0.63    0.01     300/400         advect(int, int, int, int, float*, float*, float*, float*, float*, float) [8]
+                0.04    0.00     300/400         add_source(int, int, int, float*, float*, float) [10]
+-----------------------------------------------
+                1.50    0.05     200/600         project(int, int, int, float*, float*, float*, float*, float*) [6]
+                3.00    0.10     400/600         diffuse(int, int, int, int, float*, float*, float, float) [5]
+[4]     76.3    4.50    0.15     600         lin_solve(int, int, int, int, float*, float*, float, float) [4]
+                0.15    0.00    4839/6239        set_bnd(int, int, int, int, float*) [9]
+-----------------------------------------------
+                0.00    0.77     100/400         dens_step(int, int, int, float*, float*, float*, float*, float*, float, float) [7]
+                0.00    2.32     300/400         vel_step(int, int, int, float*, float*, float*, float*, float*, float*, float, float) [3]
+[5]     50.9    0.00    3.10     400         diffuse(int, int, int, int, float*, float*, float, float) [5]
+                3.00    0.10     400/600         lin_solve(int, int, int, int, float*, float*, float, float) [4]
+-----------------------------------------------
+                0.46    1.58     200/200         vel_step(int, int, int, float*, float*, float*, float*, float*, float*, float, float) [3]
+[6]     33.5    0.46    1.58     200         project(int, int, int, float*, float*, float*, float*, float*) [6]
+                1.50    0.05     200/600         lin_solve(int, int, int, int, float*, float*, float, float) [4]
+                0.03    0.00    1000/6239        set_bnd(int, int, int, int, float*) [9]
+-----------------------------------------------
+                0.00    1.00     100/100         simulate(EventManager&, int) [2]
+[7]     16.5    0.00    1.00     100         dens_step(int, int, int, float*, float*, float*, float*, float*, float, float) [7]
+                0.00    0.77     100/400         diffuse(int, int, int, int, float*, float*, float, float) [5]
+                0.21    0.00     100/400         advect(int, int, int, int, float*, float*, float*, float*, float*, float) [8]
+                0.01    0.00     100/400         add_source(int, int, int, float*, float*, float) [10]
+-----------------------------------------------
+                0.21    0.00     100/400         dens_step(int, int, int, float*, float*, float*, float*, float*, float, float) [7]
+                0.63    0.01     300/400         vel_step(int, int, int, float*, float*, float*, float*, float*, float*, float, float) [3]
+[8]     14.0    0.84    0.01     400         advect(int, int, int, int, float*, float*, float*, float*, float*, float) [8]
+                0.01    0.00     400/6239        set_bnd(int, int, int, int, float*) [9]
+-----------------------------------------------
+                0.01    0.00     400/6239        advect(int, int, int, int, float*, float*, float*, float*, float*, float) [8]
+                0.03    0.00    1000/6239        project(int, int, int, float*, float*, float*, float*, float*) [6]
+                0.15    0.00    4839/6239        lin_solve(int, int, int, int, float*, float*, float, float) [4]
+[9]      3.1    0.19    0.00    6239         set_bnd(int, int, int, int, float*) [9]
+-----------------------------------------------
+                0.01    0.00     100/400         dens_step(int, int, int, float*, float*, float*, float*, float*, float, float) [7]
+                0.04    0.00     300/400         vel_step(int, int, int, float*, float*, float*, float*, float*, float*, float, float) [3]
+[10]     1.0    0.06    0.00     400         add_source(int, int, int, float*, float*, float) [10]
+-----------------------------------------------
+                                                 <spontaneous>
+[11]     0.7    0.04    0.00                 _init [11]
+-----------------------------------------------
+                0.00    0.00    4440/4440        bool __gnu_cxx::operator!=<Event const*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > > const&) [19]
+[18]     0.0    0.00    0.00    4440         __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::base() const [18]
+-----------------------------------------------
+                0.00    0.00     120/2220        apply_events(std::vector<Event, std::allocator<Event> > const&) [45]
+                0.00    0.00    2100/2220        EventManager::get_events_at_timestamp(int) const [46]
+[19]     0.0    0.00    0.00    2220         bool __gnu_cxx::operator!=<Event const*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > > const&) [19]
+                0.00    0.00    4440/4440        __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::base() const [18]
+-----------------------------------------------
+                0.00    0.00      20/2020        apply_events(std::vector<Event, std::allocator<Event> > const&) [45]
+                0.00    0.00    2000/2020        EventManager::get_events_at_timestamp(int) const [46]
+[20]     0.0    0.00    0.00    2020         __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::operator++() [20]
+-----------------------------------------------
+                0.00    0.00      20/2020        apply_events(std::vector<Event, std::allocator<Event> > const&) [45]
+                0.00    0.00    2000/2020        EventManager::get_events_at_timestamp(int) const [46]
+[21]     0.0    0.00    0.00    2020         __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::operator*() const [21]
+-----------------------------------------------
+                0.00    0.00     200/400         std::vector<Event, std::allocator<Event> >::begin() const [24]
+                0.00    0.00     200/400         std::vector<Event, std::allocator<Event> >::end() const [23]
+[22]     0.0    0.00    0.00     400         __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::__normal_iterator(Event const* const&) [22]
+-----------------------------------------------
+                0.00    0.00     100/200         apply_events(std::vector<Event, std::allocator<Event> > const&) [45]
+                0.00    0.00     100/200         EventManager::get_events_at_timestamp(int) const [46]
+[23]     0.0    0.00    0.00     200         std::vector<Event, std::allocator<Event> >::end() const [23]
+                0.00    0.00     200/400         __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::__normal_iterator(Event const* const&) [22]
+-----------------------------------------------
+                0.00    0.00     100/200         apply_events(std::vector<Event, std::allocator<Event> > const&) [45]
+                0.00    0.00     100/200         EventManager::get_events_at_timestamp(int) const [46]
+[24]     0.0    0.00    0.00     200         std::vector<Event, std::allocator<Event> >::begin() const [24]
+                0.00    0.00     200/400         __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::__normal_iterator(Event const* const&) [22]
+-----------------------------------------------
+                0.00    0.00       6/186         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&) [95]
+                0.00    0.00      12/186         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&) [96]
+                0.00    0.00      24/186         Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&>(int&, int&) [90]
+                0.00    0.00      24/186         void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&>(std::allocator<Event>&, Event*, int&, int&) [89]
+                0.00    0.00      24/186         void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&>(Event*, int&, int&) [88]
+                0.00    0.00      32/186         Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&, int&, int&>(int&, int&, int&, int&) [94]
+                0.00    0.00      32/186         void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&, int&, int&>(std::allocator<Event>&, Event*, int&, int&, int&, int&) [93]
+                0.00    0.00      32/186         void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&, int&, int&>(Event*, int&, int&, int&, int&) [92]
+[25]     0.0    0.00    0.00     186         int& std::forward<int&>(std::remove_reference<int&>::type&) [25]
+-----------------------------------------------
+                0.00    0.00     156/156         Event* std::__relocate_a<Event*, Event*, std::allocator<Event> >(Event*, Event*, Event*, std::allocator<Event>&) [60]
+[26]     0.0    0.00    0.00     156         Event* std::__niter_base<Event*>(Event*) [26]
+-----------------------------------------------
+                0.00    0.00       6/153         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&) [95]
+                0.00    0.00       6/153         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&) [96]
+                0.00    0.00      40/153         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&) [84]
+                0.00    0.00     101/153         std::vector<Event, std::allocator<Event> >::~vector() [42]
+[27]     0.0    0.00    0.00     153         std::_Vector_base<Event, std::allocator<Event> >::_M_get_Tp_allocator() [27]
+-----------------------------------------------
+                0.00    0.00       3/127         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&) [95]
+                0.00    0.00       3/127         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&) [96]
+                0.00    0.00      20/127         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&) [84]
+                0.00    0.00     101/127         std::_Vector_base<Event, std::allocator<Event> >::~_Vector_base() [40]
+[28]     0.0    0.00    0.00     127         std::_Vector_base<Event, std::allocator<Event> >::_M_deallocate(Event*, unsigned long) [28]
+                0.00    0.00      26/26          std::allocator_traits<std::allocator<Event> >::deallocate(std::allocator<Event>&, Event*, unsigned long) [76]
+-----------------------------------------------
+                0.00    0.00       6/104         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&) [95]
+                0.00    0.00       6/104         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&) [96]
+                0.00    0.00      40/104         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&) [84]
+                0.00    0.00      52/104         __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::difference_type __gnu_cxx::operator-<Event*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&) [73]
+[29]     0.0    0.00    0.00     104         __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::base() const [29]
+-----------------------------------------------
+                0.00    0.00     104/104         std::vector<Event, std::allocator<Event> >::_M_check_len(unsigned long, char const*) const [74]
+[30]     0.0    0.00    0.00     104         std::vector<Event, std::allocator<Event> >::size() const [30]
+-----------------------------------------------
+                0.00    0.00     101/101         std::allocator<Event>::allocator() [33]
+[31]     0.0    0.00    0.00     101         __gnu_cxx::new_allocator<Event>::new_allocator() [31]
+-----------------------------------------------
+                0.00    0.00     101/101         std::allocator<Event>::~allocator() [34]
+[32]     0.0    0.00    0.00     101         __gnu_cxx::new_allocator<Event>::~new_allocator() [32]
+-----------------------------------------------
+                0.00    0.00     101/101         std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl::_Vector_impl() [36]
+[33]     0.0    0.00    0.00     101         std::allocator<Event>::allocator() [33]
+                0.00    0.00     101/101         __gnu_cxx::new_allocator<Event>::new_allocator() [31]
+-----------------------------------------------
+                0.00    0.00     101/101         std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl::~_Vector_impl() [37]
+[34]     0.0    0.00    0.00     101         std::allocator<Event>::~allocator() [34]
+                0.00    0.00     101/101         __gnu_cxx::new_allocator<Event>::~new_allocator() [32]
+-----------------------------------------------
+                0.00    0.00     101/101         void std::_Destroy<Event*>(Event*, Event*) [43]
+[35]     0.0    0.00    0.00     101         void std::_Destroy_aux<true>::__destroy<Event*>(Event*, Event*) [35]
+-----------------------------------------------
+                0.00    0.00     101/101         std::_Vector_base<Event, std::allocator<Event> >::_Vector_base() [39]
+[36]     0.0    0.00    0.00     101         std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl::_Vector_impl() [36]
+                0.00    0.00     101/101         std::allocator<Event>::allocator() [33]
+                0.00    0.00     101/101         std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl_data::_Vector_impl_data() [38]
+-----------------------------------------------
+                0.00    0.00     101/101         std::_Vector_base<Event, std::allocator<Event> >::~_Vector_base() [40]
+[37]     0.0    0.00    0.00     101         std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl::~_Vector_impl() [37]
+                0.00    0.00     101/101         std::allocator<Event>::~allocator() [34]
+-----------------------------------------------
+                0.00    0.00     101/101         std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl::_Vector_impl() [36]
+[38]     0.0    0.00    0.00     101         std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl_data::_Vector_impl_data() [38]
+-----------------------------------------------
+                0.00    0.00     101/101         std::vector<Event, std::allocator<Event> >::vector() [41]
+[39]     0.0    0.00    0.00     101         std::_Vector_base<Event, std::allocator<Event> >::_Vector_base() [39]
+                0.00    0.00     101/101         std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl::_Vector_impl() [36]
+-----------------------------------------------
+                0.00    0.00     101/101         std::vector<Event, std::allocator<Event> >::~vector() [42]
+[40]     0.0    0.00    0.00     101         std::_Vector_base<Event, std::allocator<Event> >::~_Vector_base() [40]
+                0.00    0.00     101/127         std::_Vector_base<Event, std::allocator<Event> >::_M_deallocate(Event*, unsigned long) [28]
+                0.00    0.00     101/101         std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl::~_Vector_impl() [37]
+-----------------------------------------------
+                0.00    0.00       1/101         EventManager::EventManager() [104]
+                0.00    0.00     100/101         EventManager::get_events_at_timestamp(int) const [46]
+[41]     0.0    0.00    0.00     101         std::vector<Event, std::allocator<Event> >::vector() [41]
+                0.00    0.00     101/101         std::_Vector_base<Event, std::allocator<Event> >::_Vector_base() [39]
+-----------------------------------------------
+                0.00    0.00       1/101         EventManager::~EventManager() [105]
+                0.00    0.00     100/101         simulate(EventManager&, int) [2]
+[42]     0.0    0.00    0.00     101         std::vector<Event, std::allocator<Event> >::~vector() [42]
+                0.00    0.00     101/153         std::_Vector_base<Event, std::allocator<Event> >::_M_get_Tp_allocator() [27]
+                0.00    0.00     101/101         void std::_Destroy<Event*, Event>(Event*, Event*, std::allocator<Event>&) [44]
+                0.00    0.00     101/101         std::_Vector_base<Event, std::allocator<Event> >::~_Vector_base() [40]
+-----------------------------------------------
+                0.00    0.00     101/101         void std::_Destroy<Event*, Event>(Event*, Event*, std::allocator<Event>&) [44]
+[43]     0.0    0.00    0.00     101         void std::_Destroy<Event*>(Event*, Event*) [43]
+                0.00    0.00     101/101         void std::_Destroy_aux<true>::__destroy<Event*>(Event*, Event*) [35]
+-----------------------------------------------
+                0.00    0.00     101/101         std::vector<Event, std::allocator<Event> >::~vector() [42]
+[44]     0.0    0.00    0.00     101         void std::_Destroy<Event*, Event>(Event*, Event*, std::allocator<Event>&) [44]
+                0.00    0.00     101/101         void std::_Destroy<Event*>(Event*, Event*) [43]
+-----------------------------------------------
+                0.00    0.00     100/100         simulate(EventManager&, int) [2]
+[45]     0.0    0.00    0.00     100         apply_events(std::vector<Event, std::allocator<Event> > const&) [45]
+                0.00    0.00     120/2220        bool __gnu_cxx::operator!=<Event const*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > > const&) [19]
+                0.00    0.00     100/200         std::vector<Event, std::allocator<Event> >::begin() const [24]
+                0.00    0.00     100/200         std::vector<Event, std::allocator<Event> >::end() const [23]
+                0.00    0.00      20/2020        __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::operator*() const [21]
+                0.00    0.00      20/2020        __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::operator++() [20]
+-----------------------------------------------
+                0.00    0.00     100/100         simulate(EventManager&, int) [2]
+[46]     0.0    0.00    0.00     100         EventManager::get_events_at_timestamp(int) const [46]
+                0.00    0.00    2100/2220        bool __gnu_cxx::operator!=<Event const*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > > const&) [19]
+                0.00    0.00    2000/2020        __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::operator*() const [21]
+                0.00    0.00    2000/2020        __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::operator++() [20]
+                0.00    0.00     100/101         std::vector<Event, std::allocator<Event> >::vector() [41]
+                0.00    0.00     100/200         std::vector<Event, std::allocator<Event> >::begin() const [24]
+                0.00    0.00     100/200         std::vector<Event, std::allocator<Event> >::end() const [23]
+                0.00    0.00      20/20          std::vector<Event, std::allocator<Event> >::push_back(Event const&) [86]
+-----------------------------------------------
+                0.00    0.00      32/96          void std::__relocate_object_a<Event, Event, std::allocator<Event> >(Event*, Event*, std::allocator<Event>&) [68]
+                0.00    0.00      64/96          Event* std::__relocate_a_1<Event*, Event*, std::allocator<Event> >(Event*, Event*, Event*, std::allocator<Event>&) [61]
+[47]     0.0    0.00    0.00      96         Event* std::__addressof<Event>(Event&) [47]
+-----------------------------------------------
+                0.00    0.00      20/92          __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::operator-(long) const [82]
+                0.00    0.00      26/92          std::vector<Event, std::allocator<Event> >::begin() [78]
+                0.00    0.00      46/92          std::vector<Event, std::allocator<Event> >::end() [63]
+[48]     0.0    0.00    0.00      92         __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::__normal_iterator(Event* const&) [48]
+-----------------------------------------------
+                0.00    0.00      26/78          __gnu_cxx::new_allocator<Event>::allocate(unsigned long, void const*) [72]
+                0.00    0.00      52/78          __gnu_cxx::new_allocator<Event>::max_size() const [53]
+[49]     0.0    0.00    0.00      78         __gnu_cxx::new_allocator<Event>::_M_max_size() const [49]
+-----------------------------------------------
+                0.00    0.00       8/72          void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&, int&, int&>(Event*, int&, int&, int&, int&) [92]
+                0.00    0.00      12/72          void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&>(Event*, int&, int&) [88]
+                0.00    0.00      20/72          void __gnu_cxx::new_allocator<Event>::construct<Event, Event const&>(Event*, Event const&) [80]
+                0.00    0.00      32/72          void __gnu_cxx::new_allocator<Event>::construct<Event, Event>(Event*, Event&&) [65]
+[50]     0.0    0.00    0.00      72         operator new(unsigned long, void*) [50]
+-----------------------------------------------
+                0.00    0.00      32/64          void std::allocator_traits<std::allocator<Event> >::construct<Event, Event>(std::allocator<Event>&, Event*, Event&&) [67]
+                0.00    0.00      32/64          void __gnu_cxx::new_allocator<Event>::construct<Event, Event>(Event*, Event&&) [65]
+[51]     0.0    0.00    0.00      64         Event&& std::forward<Event>(std::remove_reference<Event>::type&) [51]
+-----------------------------------------------
+                0.00    0.00      20/60          void std::allocator_traits<std::allocator<Event> >::construct<Event, Event const&>(std::allocator<Event>&, Event*, Event const&) [83]
+                0.00    0.00      20/60          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&) [84]
+                0.00    0.00      20/60          void __gnu_cxx::new_allocator<Event>::construct<Event, Event const&>(Event*, Event const&) [80]
+[52]     0.0    0.00    0.00      60         Event const& std::forward<Event const&>(std::remove_reference<Event const&>::type&) [52]
+-----------------------------------------------
+                0.00    0.00      52/52          std::allocator_traits<std::allocator<Event> >::max_size(std::allocator<Event> const&) [56]
+[53]     0.0    0.00    0.00      52         __gnu_cxx::new_allocator<Event>::max_size() const [53]
+                0.00    0.00      52/78          __gnu_cxx::new_allocator<Event>::_M_max_size() const [49]
+-----------------------------------------------
+                0.00    0.00      52/52          std::vector<Event, std::allocator<Event> >::max_size() const [55]
+[54]     0.0    0.00    0.00      52         std::_Vector_base<Event, std::allocator<Event> >::_M_get_Tp_allocator() const [54]
+-----------------------------------------------
+                0.00    0.00      52/52          std::vector<Event, std::allocator<Event> >::_M_check_len(unsigned long, char const*) const [74]
+[55]     0.0    0.00    0.00      52         std::vector<Event, std::allocator<Event> >::max_size() const [55]
+                0.00    0.00      52/52          std::_Vector_base<Event, std::allocator<Event> >::_M_get_Tp_allocator() const [54]
+                0.00    0.00      52/52          std::vector<Event, std::allocator<Event> >::_S_max_size(std::allocator<Event> const&) [57]
+-----------------------------------------------
+                0.00    0.00      52/52          std::vector<Event, std::allocator<Event> >::_S_max_size(std::allocator<Event> const&) [57]
+[56]     0.0    0.00    0.00      52         std::allocator_traits<std::allocator<Event> >::max_size(std::allocator<Event> const&) [56]
+                0.00    0.00      52/52          __gnu_cxx::new_allocator<Event>::max_size() const [53]
+-----------------------------------------------
+                0.00    0.00      52/52          std::vector<Event, std::allocator<Event> >::max_size() const [55]
+[57]     0.0    0.00    0.00      52         std::vector<Event, std::allocator<Event> >::_S_max_size(std::allocator<Event> const&) [57]
+                0.00    0.00      52/52          std::allocator_traits<std::allocator<Event> >::max_size(std::allocator<Event> const&) [56]
+                0.00    0.00      52/52          unsigned long const& std::min<unsigned long>(unsigned long const&, unsigned long const&) [62]
+-----------------------------------------------
+                0.00    0.00       6/52          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&) [95]
+                0.00    0.00       6/52          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&) [96]
+                0.00    0.00      40/52          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&) [84]
+[58]     0.0    0.00    0.00      52         std::vector<Event, std::allocator<Event> >::_S_relocate(Event*, Event*, Event*, std::allocator<Event>&) [58]
+                0.00    0.00      52/52          std::vector<Event, std::allocator<Event> >::_S_do_relocate(Event*, Event*, Event*, std::allocator<Event>&, std::integral_constant<bool, true>) [59]
+-----------------------------------------------
+                0.00    0.00      52/52          std::vector<Event, std::allocator<Event> >::_S_relocate(Event*, Event*, Event*, std::allocator<Event>&) [58]
+[59]     0.0    0.00    0.00      52         std::vector<Event, std::allocator<Event> >::_S_do_relocate(Event*, Event*, Event*, std::allocator<Event>&, std::integral_constant<bool, true>) [59]
+                0.00    0.00      52/52          Event* std::__relocate_a<Event*, Event*, std::allocator<Event> >(Event*, Event*, Event*, std::allocator<Event>&) [60]
+-----------------------------------------------
+                0.00    0.00      52/52          std::vector<Event, std::allocator<Event> >::_S_do_relocate(Event*, Event*, Event*, std::allocator<Event>&, std::integral_constant<bool, true>) [59]
+[60]     0.0    0.00    0.00      52         Event* std::__relocate_a<Event*, Event*, std::allocator<Event> >(Event*, Event*, Event*, std::allocator<Event>&) [60]
+                0.00    0.00     156/156         Event* std::__niter_base<Event*>(Event*) [26]
+                0.00    0.00      52/52          Event* std::__relocate_a_1<Event*, Event*, std::allocator<Event> >(Event*, Event*, Event*, std::allocator<Event>&) [61]
+-----------------------------------------------
+                0.00    0.00      52/52          Event* std::__relocate_a<Event*, Event*, std::allocator<Event> >(Event*, Event*, Event*, std::allocator<Event>&) [60]
+[61]     0.0    0.00    0.00      52         Event* std::__relocate_a_1<Event*, Event*, std::allocator<Event> >(Event*, Event*, Event*, std::allocator<Event>&) [61]
+                0.00    0.00      64/96          Event* std::__addressof<Event>(Event&) [47]
+                0.00    0.00      32/32          void std::__relocate_object_a<Event, Event, std::allocator<Event> >(Event*, Event*, std::allocator<Event>&) [68]
+-----------------------------------------------
+                0.00    0.00      52/52          std::vector<Event, std::allocator<Event> >::_S_max_size(std::allocator<Event> const&) [57]
+[62]     0.0    0.00    0.00      52         unsigned long const& std::min<unsigned long>(unsigned long const&, unsigned long const&) [62]
+-----------------------------------------------
+                0.00    0.00       3/46          Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&>(int&, int&) [90]
+                0.00    0.00       3/46          Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&, int&, int&>(int&, int&, int&, int&) [94]
+                0.00    0.00      20/46          std::vector<Event, std::allocator<Event> >::push_back(Event const&) [86]
+                0.00    0.00      20/46          std::vector<Event, std::allocator<Event> >::back() [85]
+[63]     0.0    0.00    0.00      46         std::vector<Event, std::allocator<Event> >::end() [63]
+                0.00    0.00      46/92          __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::__normal_iterator(Event* const&) [48]
+-----------------------------------------------
+                0.00    0.00      32/32          void std::allocator_traits<std::allocator<Event> >::destroy<Event>(std::allocator<Event>&, Event*) [66]
+[64]     0.0    0.00    0.00      32         void __gnu_cxx::new_allocator<Event>::destroy<Event>(Event*) [64]
+-----------------------------------------------
+                0.00    0.00      32/32          void std::allocator_traits<std::allocator<Event> >::construct<Event, Event>(std::allocator<Event>&, Event*, Event&&) [67]
+[65]     0.0    0.00    0.00      32         void __gnu_cxx::new_allocator<Event>::construct<Event, Event>(Event*, Event&&) [65]
+                0.00    0.00      32/64          Event&& std::forward<Event>(std::remove_reference<Event>::type&) [51]
+                0.00    0.00      32/72          operator new(unsigned long, void*) [50]
+-----------------------------------------------
+                0.00    0.00      32/32          void std::__relocate_object_a<Event, Event, std::allocator<Event> >(Event*, Event*, std::allocator<Event>&) [68]
+[66]     0.0    0.00    0.00      32         void std::allocator_traits<std::allocator<Event> >::destroy<Event>(std::allocator<Event>&, Event*) [66]
+                0.00    0.00      32/32          void __gnu_cxx::new_allocator<Event>::destroy<Event>(Event*) [64]
+-----------------------------------------------
+                0.00    0.00      32/32          void std::__relocate_object_a<Event, Event, std::allocator<Event> >(Event*, Event*, std::allocator<Event>&) [68]
+[67]     0.0    0.00    0.00      32         void std::allocator_traits<std::allocator<Event> >::construct<Event, Event>(std::allocator<Event>&, Event*, Event&&) [67]
+                0.00    0.00      32/64          Event&& std::forward<Event>(std::remove_reference<Event>::type&) [51]
+                0.00    0.00      32/32          void __gnu_cxx::new_allocator<Event>::construct<Event, Event>(Event*, Event&&) [65]
+-----------------------------------------------
+                0.00    0.00      32/32          Event* std::__relocate_a_1<Event*, Event*, std::allocator<Event> >(Event*, Event*, Event*, std::allocator<Event>&) [61]
+[68]     0.0    0.00    0.00      32         void std::__relocate_object_a<Event, Event, std::allocator<Event> >(Event*, Event*, std::allocator<Event>&) [68]
+                0.00    0.00      32/32          std::remove_reference<Event&>::type&& std::move<Event&>(Event&) [69]
+                0.00    0.00      32/32          void std::allocator_traits<std::allocator<Event> >::construct<Event, Event>(std::allocator<Event>&, Event*, Event&&) [67]
+                0.00    0.00      32/96          Event* std::__addressof<Event>(Event&) [47]
+                0.00    0.00      32/32          void std::allocator_traits<std::allocator<Event> >::destroy<Event>(std::allocator<Event>&, Event*) [66]
+-----------------------------------------------
+                0.00    0.00      32/32          void std::__relocate_object_a<Event, Event, std::allocator<Event> >(Event*, Event*, std::allocator<Event>&) [68]
+[69]     0.0    0.00    0.00      32         std::remove_reference<Event&>::type&& std::move<Event&>(Event&) [69]
+-----------------------------------------------
+                0.00    0.00      28/28          EventManager::read_events(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [103]
+[70]     0.0    0.00    0.00      28         bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [70]
+-----------------------------------------------
+                0.00    0.00      26/26          std::allocator_traits<std::allocator<Event> >::deallocate(std::allocator<Event>&, Event*, unsigned long) [76]
+[71]     0.0    0.00    0.00      26         __gnu_cxx::new_allocator<Event>::deallocate(Event*, unsigned long) [71]
+-----------------------------------------------
+                0.00    0.00      26/26          std::allocator_traits<std::allocator<Event> >::allocate(std::allocator<Event>&, unsigned long) [77]
+[72]     0.0    0.00    0.00      26         __gnu_cxx::new_allocator<Event>::allocate(unsigned long, void const*) [72]
+                0.00    0.00      26/78          __gnu_cxx::new_allocator<Event>::_M_max_size() const [49]
+-----------------------------------------------
+                0.00    0.00       3/26          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&) [95]
+                0.00    0.00       3/26          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&) [96]
+                0.00    0.00      20/26          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&) [84]
+[73]     0.0    0.00    0.00      26         __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::difference_type __gnu_cxx::operator-<Event*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&) [73]
+                0.00    0.00      52/104         __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::base() const [29]
+-----------------------------------------------
+                0.00    0.00       3/26          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&) [95]
+                0.00    0.00       3/26          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&) [96]
+                0.00    0.00      20/26          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&) [84]
+[74]     0.0    0.00    0.00      26         std::vector<Event, std::allocator<Event> >::_M_check_len(unsigned long, char const*) const [74]
+                0.00    0.00     104/104         std::vector<Event, std::allocator<Event> >::size() const [30]
+                0.00    0.00      52/52          std::vector<Event, std::allocator<Event> >::max_size() const [55]
+                0.00    0.00      26/26          unsigned long const& std::max<unsigned long>(unsigned long const&, unsigned long const&) [79]
+-----------------------------------------------
+                0.00    0.00       3/26          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&) [95]
+                0.00    0.00       3/26          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&) [96]
+                0.00    0.00      20/26          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&) [84]
+[75]     0.0    0.00    0.00      26         std::_Vector_base<Event, std::allocator<Event> >::_M_allocate(unsigned long) [75]
+                0.00    0.00      26/26          std::allocator_traits<std::allocator<Event> >::allocate(std::allocator<Event>&, unsigned long) [77]
+-----------------------------------------------
+                0.00    0.00      26/26          std::_Vector_base<Event, std::allocator<Event> >::_M_deallocate(Event*, unsigned long) [28]
+[76]     0.0    0.00    0.00      26         std::allocator_traits<std::allocator<Event> >::deallocate(std::allocator<Event>&, Event*, unsigned long) [76]
+                0.00    0.00      26/26          __gnu_cxx::new_allocator<Event>::deallocate(Event*, unsigned long) [71]
+-----------------------------------------------
+                0.00    0.00      26/26          std::_Vector_base<Event, std::allocator<Event> >::_M_allocate(unsigned long) [75]
+[77]     0.0    0.00    0.00      26         std::allocator_traits<std::allocator<Event> >::allocate(std::allocator<Event>&, unsigned long) [77]
+                0.00    0.00      26/26          __gnu_cxx::new_allocator<Event>::allocate(unsigned long, void const*) [72]
+-----------------------------------------------
+                0.00    0.00       3/26          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&) [95]
+                0.00    0.00       3/26          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&) [96]
+                0.00    0.00      20/26          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&) [84]
+[78]     0.0    0.00    0.00      26         std::vector<Event, std::allocator<Event> >::begin() [78]
+                0.00    0.00      26/92          __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::__normal_iterator(Event* const&) [48]
+-----------------------------------------------
+                0.00    0.00      26/26          std::vector<Event, std::allocator<Event> >::_M_check_len(unsigned long, char const*) const [74]
+[79]     0.0    0.00    0.00      26         unsigned long const& std::max<unsigned long>(unsigned long const&, unsigned long const&) [79]
+-----------------------------------------------
+                0.00    0.00      20/20          void std::allocator_traits<std::allocator<Event> >::construct<Event, Event const&>(std::allocator<Event>&, Event*, Event const&) [83]
+[80]     0.0    0.00    0.00      20         void __gnu_cxx::new_allocator<Event>::construct<Event, Event const&>(Event*, Event const&) [80]
+                0.00    0.00      20/60          Event const& std::forward<Event const&>(std::remove_reference<Event const&>::type&) [52]
+                0.00    0.00      20/72          operator new(unsigned long, void*) [50]
+-----------------------------------------------
+                0.00    0.00      20/20          std::vector<Event, std::allocator<Event> >::back() [85]
+[81]     0.0    0.00    0.00      20         __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::operator*() const [81]
+-----------------------------------------------
+                0.00    0.00      20/20          std::vector<Event, std::allocator<Event> >::back() [85]
+[82]     0.0    0.00    0.00      20         __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::operator-(long) const [82]
+                0.00    0.00      20/92          __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::__normal_iterator(Event* const&) [48]
+-----------------------------------------------
+                0.00    0.00      20/20          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&) [84]
+[83]     0.0    0.00    0.00      20         void std::allocator_traits<std::allocator<Event> >::construct<Event, Event const&>(std::allocator<Event>&, Event*, Event const&) [83]
+                0.00    0.00      20/60          Event const& std::forward<Event const&>(std::remove_reference<Event const&>::type&) [52]
+                0.00    0.00      20/20          void __gnu_cxx::new_allocator<Event>::construct<Event, Event const&>(Event*, Event const&) [80]
+-----------------------------------------------
+                0.00    0.00      20/20          std::vector<Event, std::allocator<Event> >::push_back(Event const&) [86]
+[84]     0.0    0.00    0.00      20         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&) [84]
+                0.00    0.00      40/153         std::_Vector_base<Event, std::allocator<Event> >::_M_get_Tp_allocator() [27]
+                0.00    0.00      40/104         __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::base() const [29]
+                0.00    0.00      40/52          std::vector<Event, std::allocator<Event> >::_S_relocate(Event*, Event*, Event*, std::allocator<Event>&) [58]
+                0.00    0.00      20/26          std::vector<Event, std::allocator<Event> >::_M_check_len(unsigned long, char const*) const [74]
+                0.00    0.00      20/26          std::vector<Event, std::allocator<Event> >::begin() [78]
+                0.00    0.00      20/26          __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::difference_type __gnu_cxx::operator-<Event*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&) [73]
+                0.00    0.00      20/26          std::_Vector_base<Event, std::allocator<Event> >::_M_allocate(unsigned long) [75]
+                0.00    0.00      20/60          Event const& std::forward<Event const&>(std::remove_reference<Event const&>::type&) [52]
+                0.00    0.00      20/20          void std::allocator_traits<std::allocator<Event> >::construct<Event, Event const&>(std::allocator<Event>&, Event*, Event const&) [83]
+                0.00    0.00      20/127         std::_Vector_base<Event, std::allocator<Event> >::_M_deallocate(Event*, unsigned long) [28]
+-----------------------------------------------
+                0.00    0.00       8/20          Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&, int&, int&>(int&, int&, int&, int&) [94]
+                0.00    0.00      12/20          Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&>(int&, int&) [90]
+[85]     0.0    0.00    0.00      20         std::vector<Event, std::allocator<Event> >::back() [85]
+                0.00    0.00      20/46          std::vector<Event, std::allocator<Event> >::end() [63]
+                0.00    0.00      20/20          __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::operator-(long) const [82]
+                0.00    0.00      20/20          __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::operator*() const [81]
+-----------------------------------------------
+                0.00    0.00      20/20          EventManager::get_events_at_timestamp(int) const [46]
+[86]     0.0    0.00    0.00      20         std::vector<Event, std::allocator<Event> >::push_back(Event const&) [86]
+                0.00    0.00      20/46          std::vector<Event, std::allocator<Event> >::end() [63]
+                0.00    0.00      20/20          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&) [84]
+-----------------------------------------------
+                0.00    0.00      12/12          void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&>(Event*, int&, int&) [88]
+[87]     0.0    0.00    0.00      12         Event::Event(int, int) [87]
+-----------------------------------------------
+                0.00    0.00      12/12          void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&>(std::allocator<Event>&, Event*, int&, int&) [89]
+[88]     0.0    0.00    0.00      12         void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&>(Event*, int&, int&) [88]
+                0.00    0.00      24/186         int& std::forward<int&>(std::remove_reference<int&>::type&) [25]
+                0.00    0.00      12/72          operator new(unsigned long, void*) [50]
+                0.00    0.00      12/12          Event::Event(int, int) [87]
+-----------------------------------------------
+                0.00    0.00       3/12          void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&) [95]
+                0.00    0.00       9/12          Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&>(int&, int&) [90]
+[89]     0.0    0.00    0.00      12         void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&>(std::allocator<Event>&, Event*, int&, int&) [89]
+                0.00    0.00      24/186         int& std::forward<int&>(std::remove_reference<int&>::type&) [25]
+                0.00    0.00      12/12          void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&>(Event*, int&, int&) [88]
+-----------------------------------------------
+                0.00    0.00      12/12          EventManager::read_events(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [103]
+[90]     0.0    0.00    0.00      12         Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&>(int&, int&) [90]
+                0.00    0.00      24/186         int& std::forward<int&>(std::remove_reference<int&>::type&) [25]
+                0.00    0.00      12/20          std::vector<Event, std::allocator<Event> >::back() [85]
+                0.00    0.00       9/12          void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&>(std::allocator<Event>&, Event*, int&, int&) [89]
+                0.00    0.00       3/46          std::vector<Event, std::allocator<Event> >::end() [63]
+                0.00    0.00       3/3           void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&) [95]
+-----------------------------------------------
+                0.00    0.00       8/8           void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&, int&, int&>(Event*, int&, int&, int&, int&) [92]
+[91]     0.0    0.00    0.00       8         Event::Event(int, int, int, int) [91]
+-----------------------------------------------
+                0.00    0.00       8/8           void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&, int&, int&>(std::allocator<Event>&, Event*, int&, int&, int&, int&) [93]
+[92]     0.0    0.00    0.00       8         void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&, int&, int&>(Event*, int&, int&, int&, int&) [92]
+                0.00    0.00      32/186         int& std::forward<int&>(std::remove_reference<int&>::type&) [25]
+                0.00    0.00       8/72          operator new(unsigned long, void*) [50]
+                0.00    0.00       8/8           Event::Event(int, int, int, int) [91]
+-----------------------------------------------
+                0.00    0.00       3/8           void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&) [96]
+                0.00    0.00       5/8           Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&, int&, int&>(int&, int&, int&, int&) [94]
+[93]     0.0    0.00    0.00       8         void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&, int&, int&>(std::allocator<Event>&, Event*, int&, int&, int&, int&) [93]
+                0.00    0.00      32/186         int& std::forward<int&>(std::remove_reference<int&>::type&) [25]
+                0.00    0.00       8/8           void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&, int&, int&>(Event*, int&, int&, int&, int&) [92]
+-----------------------------------------------
+                0.00    0.00       8/8           EventManager::read_events(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [103]
+[94]     0.0    0.00    0.00       8         Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&, int&, int&>(int&, int&, int&, int&) [94]
+                0.00    0.00      32/186         int& std::forward<int&>(std::remove_reference<int&>::type&) [25]
+                0.00    0.00       8/20          std::vector<Event, std::allocator<Event> >::back() [85]
+                0.00    0.00       5/8           void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&, int&, int&>(std::allocator<Event>&, Event*, int&, int&, int&, int&) [93]
+                0.00    0.00       3/46          std::vector<Event, std::allocator<Event> >::end() [63]
+                0.00    0.00       3/3           void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&) [96]
+-----------------------------------------------
+                0.00    0.00       3/3           Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&>(int&, int&) [90]
+[95]     0.0    0.00    0.00       3         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&) [95]
+                0.00    0.00       6/186         int& std::forward<int&>(std::remove_reference<int&>::type&) [25]
+                0.00    0.00       6/153         std::_Vector_base<Event, std::allocator<Event> >::_M_get_Tp_allocator() [27]
+                0.00    0.00       6/104         __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::base() const [29]
+                0.00    0.00       6/52          std::vector<Event, std::allocator<Event> >::_S_relocate(Event*, Event*, Event*, std::allocator<Event>&) [58]
+                0.00    0.00       3/26          std::vector<Event, std::allocator<Event> >::_M_check_len(unsigned long, char const*) const [74]
+                0.00    0.00       3/26          std::vector<Event, std::allocator<Event> >::begin() [78]
+                0.00    0.00       3/26          __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::difference_type __gnu_cxx::operator-<Event*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&) [73]
+                0.00    0.00       3/26          std::_Vector_base<Event, std::allocator<Event> >::_M_allocate(unsigned long) [75]
+                0.00    0.00       3/12          void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&>(std::allocator<Event>&, Event*, int&, int&) [89]
+                0.00    0.00       3/127         std::_Vector_base<Event, std::allocator<Event> >::_M_deallocate(Event*, unsigned long) [28]
+-----------------------------------------------
+                0.00    0.00       3/3           Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&, int&, int&>(int&, int&, int&, int&) [94]
+[96]     0.0    0.00    0.00       3         void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&) [96]
+                0.00    0.00      12/186         int& std::forward<int&>(std::remove_reference<int&>::type&) [25]
+                0.00    0.00       6/153         std::_Vector_base<Event, std::allocator<Event> >::_M_get_Tp_allocator() [27]
+                0.00    0.00       6/104         __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::base() const [29]
+                0.00    0.00       6/52          std::vector<Event, std::allocator<Event> >::_S_relocate(Event*, Event*, Event*, std::allocator<Event>&) [58]
+                0.00    0.00       3/26          std::vector<Event, std::allocator<Event> >::_M_check_len(unsigned long, char const*) const [74]
+                0.00    0.00       3/26          std::vector<Event, std::allocator<Event> >::begin() [78]
+                0.00    0.00       3/26          __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::difference_type __gnu_cxx::operator-<Event*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&) [73]
+                0.00    0.00       3/26          std::_Vector_base<Event, std::allocator<Event> >::_M_allocate(unsigned long) [75]
+                0.00    0.00       3/8           void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&, int&, int&>(std::allocator<Event>&, Event*, int&, int&, int&, int&) [93]
+                0.00    0.00       3/127         std::_Vector_base<Event, std::allocator<Event> >::_M_deallocate(Event*, unsigned long) [28]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[97]     0.0    0.00    0.00       1         clear_data() [97]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[98]     0.0    0.00    0.00       1         sum_density() [98]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[99]     0.0    0.00    0.00       1         allocate_data() [99]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__Z13allocate_datav [114]
+[100]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [100]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN12EventManager11read_eventsERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE [115]
+[101]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [101]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[102]    0.0    0.00    0.00       1         free_data() [102]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[103]    0.0    0.00    0.00       1         EventManager::read_events(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [103]
+                0.00    0.00      28/28          bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [70]
+                0.00    0.00      12/12          Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&>(int&, int&) [90]
+                0.00    0.00       8/8           Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&, int&, int&>(int&, int&, int&, int&) [94]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[104]    0.0    0.00    0.00       1         EventManager::EventManager() [104]
+                0.00    0.00       1/101         std::vector<Event, std::allocator<Event> >::vector() [41]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[105]    0.0    0.00    0.00       1         EventManager::~EventManager() [105]
+                0.00    0.00       1/101         std::vector<Event, std::allocator<Event> >::~vector() [42]
+-----------------------------------------------
+                0.00    0.00       1/1           void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) [109]
+[106]    0.0    0.00    0.00       1         bool __gnu_cxx::__is_null_pointer<char const>(char const*) [106]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[107]    0.0    0.00    0.00       1         EventManager::get_total_timesteps() const [107]
+-----------------------------------------------
+                0.00    0.00       1/1           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [110]
+[108]    0.0    0.00    0.00       1         std::char_traits<char>::length(char const*) [108]
+-----------------------------------------------
+                0.00    0.00       1/1           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [110]
+[109]    0.0    0.00    0.00       1         void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) [109]
+                0.00    0.00       1/1           bool __gnu_cxx::__is_null_pointer<char const>(char const*) [106]
+                0.00    0.00       1/1           std::iterator_traits<char const*>::difference_type std::distance<char const*>(char const*, char const*) [113]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[110]    0.0    0.00    0.00       1         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [110]
+                0.00    0.00       1/1           std::char_traits<char>::length(char const*) [108]
+                0.00    0.00       1/1           void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) [109]
+-----------------------------------------------
+                0.00    0.00       1/1           std::iterator_traits<char const*>::difference_type std::distance<char const*>(char const*, char const*) [113]
+[111]    0.0    0.00    0.00       1         std::iterator_traits<char const*>::difference_type std::__distance<char const*>(char const*, char const*, std::random_access_iterator_tag) [111]
+-----------------------------------------------
+                0.00    0.00       1/1           std::iterator_traits<char const*>::difference_type std::distance<char const*>(char const*, char const*) [113]
+[112]    0.0    0.00    0.00       1         std::iterator_traits<char const*>::iterator_category std::__iterator_category<char const*>(char const* const&) [112]
+-----------------------------------------------
+                0.00    0.00       1/1           void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) [109]
+[113]    0.0    0.00    0.00       1         std::iterator_traits<char const*>::difference_type std::distance<char const*>(char const*, char const*) [113]
+                0.00    0.00       1/1           std::iterator_traits<char const*>::iterator_category std::__iterator_category<char const*>(char const* const&) [112]
+                0.00    0.00       1/1           std::iterator_traits<char const*>::difference_type std::__distance<char const*>(char const*, char const*, std::random_access_iterator_tag) [111]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [10] add_source(int, int, int, float*, float*, float) [107] EventManager::get_total_timesteps() const [58] std::vector<Event, std::allocator<Event> >::_S_relocate(Event*, Event*, Event*, std::allocator<Event>&)
+  [97] clear_data()           [46] EventManager::get_events_at_timestamp(int) const [90] Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&>(int&, int&)
+  [98] sum_density()          [49] __gnu_cxx::new_allocator<Event>::_M_max_size() const [94] Event& std::vector<Event, std::allocator<Event> >::emplace_back<int&, int&, int&, int&>(int&, int&, int&, int&)
+  [45] apply_events(std::vector<Event, std::allocator<Event> > const&) [53] __gnu_cxx::new_allocator<Event>::max_size() const [59] std::vector<Event, std::allocator<Event> >::_S_do_relocate(Event*, Event*, Event*, std::allocator<Event>&, std::integral_constant<bool, true>)
+  [99] allocate_data()        [29] __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::base() const [84] void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<Event const&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, Event const&)
+ [100] __static_initialization_and_destruction_0(int, int) [81] __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::operator*() const [95] void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&)
+ [101] __static_initialization_and_destruction_0(int, int) [82] __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::operator-(long) const [96] void std::vector<Event, std::allocator<Event> >::_M_realloc_insert<int&, int&, int&, int&>(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >, int&, int&, int&, int&)
+   [8] advect(int, int, int, int, float*, float*, float*, float*, float*, float) [18] __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::base() const [63] std::vector<Event, std::allocator<Event> >::end()
+   [5] diffuse(int, int, int, int, float*, float*, float, float) [21] __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::operator*() const [85] std::vector<Event, std::allocator<Event> >::back()
+   [6] project(int, int, int, float*, float*, float*, float*, float*) [54] std::_Vector_base<Event, std::allocator<Event> >::_M_get_Tp_allocator() const [78] std::vector<Event, std::allocator<Event> >::begin()
+   [9] set_bnd(int, int, int, int, float*) [74] std::vector<Event, std::allocator<Event> >::_M_check_len(unsigned long, char const*) const [86] std::vector<Event, std::allocator<Event> >::push_back(Event const&)
+   [2] simulate(EventManager&, int) [23] std::vector<Event, std::allocator<Event> >::end() const [41] std::vector<Event, std::allocator<Event> >::vector()
+   [3] vel_step(int, int, int, float*, float*, float*, float*, float*, float*, float, float) [30] std::vector<Event, std::allocator<Event> >::size() const [42] std::vector<Event, std::allocator<Event> >::~vector()
+   [7] dens_step(int, int, int, float*, float*, float*, float*, float*, float, float) [24] std::vector<Event, std::allocator<Event> >::begin() const [109] void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)
+ [102] free_data()            [55] std::vector<Event, std::allocator<Event> >::max_size() const [110] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&)
+   [4] lin_solve(int, int, int, int, float*, float*, float, float) [33] std::allocator<Event>::allocator() [111] std::iterator_traits<char const*>::difference_type std::__distance<char const*>(char const*, char const*, std::random_access_iterator_tag)
+ [103] EventManager::read_events(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [34] std::allocator<Event>::~allocator() [47] Event* std::__addressof<Event>(Event&)
+ [104] EventManager::EventManager() [108] std::char_traits<char>::length(char const*) [26] Event* std::__niter_base<Event*>(Event*)
+ [105] EventManager::~EventManager() [35] void std::_Destroy_aux<true>::__destroy<Event*>(Event*, Event*) [60] Event* std::__relocate_a<Event*, Event*, std::allocator<Event> >(Event*, Event*, Event*, std::allocator<Event>&)
+  [87] Event::Event(int, int) [75] std::_Vector_base<Event, std::allocator<Event> >::_M_allocate(unsigned long) [61] Event* std::__relocate_a_1<Event*, Event*, std::allocator<Event> >(Event*, Event*, Event*, std::allocator<Event>&)
+  [91] Event::Event(int, int, int, int) [36] std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl::_Vector_impl() [112] std::iterator_traits<char const*>::iterator_category std::__iterator_category<char const*>(char const* const&)
+  [71] __gnu_cxx::new_allocator<Event>::deallocate(Event*, unsigned long) [37] std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl::~_Vector_impl() [68] void std::__relocate_object_a<Event, Event, std::allocator<Event> >(Event*, Event*, std::allocator<Event>&)
+  [64] void __gnu_cxx::new_allocator<Event>::destroy<Event>(Event*) [28] std::_Vector_base<Event, std::allocator<Event> >::_M_deallocate(Event*, unsigned long) [79] unsigned long const& std::max<unsigned long>(unsigned long const&, unsigned long const&)
+  [72] __gnu_cxx::new_allocator<Event>::allocate(unsigned long, void const*) [38] std::_Vector_base<Event, std::allocator<Event> >::_Vector_impl_data::_Vector_impl_data() [62] unsigned long const& std::min<unsigned long>(unsigned long const&, unsigned long const&)
+  [80] void __gnu_cxx::new_allocator<Event>::construct<Event, Event const&>(Event*, Event const&) [27] std::_Vector_base<Event, std::allocator<Event> >::_M_get_Tp_allocator() [69] std::remove_reference<Event&>::type&& std::move<Event&>(Event&)
+  [88] void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&>(Event*, int&, int&) [39] std::_Vector_base<Event, std::allocator<Event> >::_Vector_base() [51] Event&& std::forward<Event>(std::remove_reference<Event>::type&)
+  [92] void __gnu_cxx::new_allocator<Event>::construct<Event, int&, int&, int&, int&>(Event*, int&, int&, int&, int&) [40] std::_Vector_base<Event, std::allocator<Event> >::~_Vector_base() [52] Event const& std::forward<Event const&>(std::remove_reference<Event const&>::type&)
+  [65] void __gnu_cxx::new_allocator<Event>::construct<Event, Event>(Event*, Event&&) [76] std::allocator_traits<std::allocator<Event> >::deallocate(std::allocator<Event>&, Event*, unsigned long) [25] int& std::forward<int&>(std::remove_reference<int&>::type&)
+  [31] __gnu_cxx::new_allocator<Event>::new_allocator() [66] void std::allocator_traits<std::allocator<Event> >::destroy<Event>(std::allocator<Event>&, Event*) [43] void std::_Destroy<Event*>(Event*, Event*)
+  [32] __gnu_cxx::new_allocator<Event>::~new_allocator() [77] std::allocator_traits<std::allocator<Event> >::allocate(std::allocator<Event>&, unsigned long) [44] void std::_Destroy<Event*, Event>(Event*, Event*, std::allocator<Event>&)
+ [106] bool __gnu_cxx::__is_null_pointer<char const>(char const*) [56] std::allocator_traits<std::allocator<Event> >::max_size(std::allocator<Event> const&) [113] std::iterator_traits<char const*>::difference_type std::distance<char const*>(char const*, char const*)
+  [48] __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::__normal_iterator(Event* const&) [83] void std::allocator_traits<std::allocator<Event> >::construct<Event, Event const&>(std::allocator<Event>&, Event*, Event const&) [70] bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  [22] __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::__normal_iterator(Event const* const&) [89] void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&>(std::allocator<Event>&, Event*, int&, int&) [50] operator new(unsigned long, void*)
+  [20] __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > >::operator++() [93] void std::allocator_traits<std::allocator<Event> >::construct<Event, int&, int&, int&, int&>(std::allocator<Event>&, Event*, int&, int&, int&, int&) [11] _init
+  [73] __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > >::difference_type __gnu_cxx::operator-<Event*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event*, std::vector<Event, std::allocator<Event> > > const&) [67] void std::allocator_traits<std::allocator<Event> >::construct<Event, Event>(std::allocator<Event>&, Event*, Event&&)
+  [19] bool __gnu_cxx::operator!=<Event const*, std::vector<Event, std::allocator<Event> > >(__gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > > const&, __gnu_cxx::__normal_iterator<Event const*, std::vector<Event, std::allocator<Event> > > const&) [57] std::vector<Event, std::allocator<Event> >::_S_max_size(std::allocator<Event> const&)
