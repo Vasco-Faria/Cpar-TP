@@ -1,21 +1,21 @@
 100
-force 0 1 0 23
-source 1 70
-source 2 35
-force 0 0 1 89
-force 0 0 1 19
-source 1 57
-force 0 0 1 64
-force 0 1 0 25
-force 0 1 0 37
-source 2 15
-force 0 1 0 58
-source 8 41
-source 10 81
-source 7 18
-source 2 53
-source 1 42
-source 9 17
-source 8 65
-source 6 71
-force 0 0 1 22
+force 0 0 1 29
+force 0 1 0 56
+force 0 1 0 18
+force 0 0 1 76
+force 0 0 1 53
+force 0 0 1 70
+source 1 61
+force 1 0 0 50
+source 1 49
+force 1 0 0 86
+source 6 75
+force 0 0 1 3
+source 9 53
+source 5 73
+force 1 0 0 12
+force 0 1 0 59
+force 0 1 0 19
+source 7 99
+force 0 1 0 7
+source 1 31
