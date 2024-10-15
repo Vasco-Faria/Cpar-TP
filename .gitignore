@@ -1,2 +1,4 @@
 .vscode
 fluid_sim
+gmon.out
+gprof_report.txt

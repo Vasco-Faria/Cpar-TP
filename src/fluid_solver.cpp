@@ -19,6 +19,7 @@ void add_source(int M, int N, int O, float *x, float *s, float dt) {
   }
 }
 
+/// OTIMIZAR !!!!!!!!!!!!!!!!!!! ///
 // Set boundary conditions
 void set_bnd(int M, int N, int O, int b, float *x) {
   int i, j;
@@ -52,7 +53,6 @@ void set_bnd(int M, int N, int O, int b, float *x) {
   x[IX(M + 1, N + 1, 0)] = 0.33f * (x[IX(M, N + 1, 0)] + x[IX(M + 1, N, 0)] +
                                     x[IX(M + 1, N + 1, 1)]);
 }
-
 
 // Linear solve for implicit methods (diffusion)
 void lin_solve(int M, int N, int O, int b, float *x, float *x0, float a, float c) {
@@ -143,6 +143,7 @@ void advect(int M, int N, int O, int b, float *d, float *d0, float *u, float *v,
   set_bnd(M, N, O, b, d);
 }
 
+/// OTIMIZAR !!!!!!!!!!!!!!!!!!! ///
 // Projection step to ensure incompressibility (make the velocity field
 // divergence-free)
 void project(int M, int N, int O, float *u, float *v, float *w, float *p,
