@@ -13,35 +13,38 @@ CFLAG_LTO = -flto
 all: default
 
 default:
-        $(CPP) $(CFLAG_DEFAULT) $(SRCS) -o $(OUTPUT)
+	$(CPP) $(CFLAG_DEFAULT) $(SRCS) -o $(OUTPUT)
 
 vec:
-        $(CPP) $(CFLAG_DEFAULT) $(CFLAG_VEC) $(SRCS) -o $(OUTPUT)
+	$(CPP) $(CFLAG_DEFAULT) $(CFLAG_VEC) $(SRCS) -o $(OUTPUT)
 
 loop:
-        $(CPP) $(CFLAG_DEFAULT) $(CFLAG_LOOP) $(SRCS) -o $(OUTPUT)
+	$(CPP) $(CFLAG_DEFAULT) $(CFLAG_LOOP) $(SRCS) -o $(OUTPUT)
 
 o3:
-        $(CPP) $(CFLAG_O3) $(SRCS) -o $(OUTPUT)
+	$(CPP) $(CFLAG_O3) $(SRCS) -o $(OUTPUT)
 
 ofast:
-        $(CPP) $(CFLAG_OFAST) $(SRCS) -o $(OUTPUT)
+	$(CPP) $(CFLAG_OFAST) $(SRCS) -o $(OUTPUT)
 
 align:
-        $(CPP) $(CFLAG_DEFAULT) $(CFLAG_ALIGN) $(SRCS) -o $(OUTPUT)
+	$(CPP) $(CFLAG_DEFAULT) $(CFLAG_ALIGN) $(SRCS) -o $(OUTPUT)
 
 lto:
-        $(CPP) $(CFLAG_DEFAULT) $(CFLAG_LTO) $(SRCS) -o $(OUTPUT)
+	$(CPP) $(CFLAG_DEFAULT) $(CFLAG_LTO) $(SRCS) -o $(OUTPUT)
+
+maxopt:
+	$(CPP) $(CFLAG_OFAST) $(CFLAG_VEC) $(CFLAG_LOOP) $(CFLAG_ALIGN) $(CFLAG_LTO) $(SRCS) -o $(OUTPUT)
 
 perf:
-        perf stat -e cache-misses,cache-references,instructions,cycles ./fluid_sim
+	perf stat -e cache-misses,cache-references,instructions,cycles ./fluid_sim
 
 gprof:
-        gprof fluid_sim gmon.out > gprof_report.txt
+	gprof fluid_sim gmon.out > gprof_report.txt
 
 graph:
-        gprof fluid_sim gmon.out | gprof2dot | dot -Tpng -o graph.png
+	gprof fluid_sim gmon.out | gprof2dot | dot -Tpng -o graph.png
 
 clean:
-        @rm fluid_sim
-        @echo Done.
+	@rm fluid_sim
+	@echo Done.

@@ -19,7 +19,6 @@ void add_source(int M, int N, int O, float *x, float *s, float dt) {
   }
 }
 
-/// OTIMIZAR !!!!!!!!!!!!!!!!!!! ///
 // Set boundary conditions
 void set_bnd(int M, int N, int O, int b, float *x) {
   int i, j;
@@ -56,39 +55,35 @@ void set_bnd(int M, int N, int O, int b, float *x) {
 
 // Linear solve for implicit methods (diffusion)
 void lin_solve(int M, int N, int O, int b, float *x, float *x0, float a, float c) {
-    float tolerance = 1e-5f;  
-    int check_frequency = 5;  
-
     for (int l = 0; l < LINEARSOLVERTIMES; l++) {
-        float max_diff = 0.0f;
-
-        // Iterate over the grid
         for (int i = 1; i <= M; i++) {
             for (int j = 1; j <= N; j++) {
                 for (int k = 1; k <= O; k++) {
-                    int idx = IX(i, j, k);
-                    float x_old = x[idx];
-                    x[idx] = (x0[IX(i, j, k)] +
-                              a * (x[IX(i - 1, j, k)] + x[IX(i + 1, j, k)] +
-                                   x[IX(i, j - 1, k)] + x[IX(i, j + 1, k)] +
-                                   x[IX(i, j, k - 1)] + x[IX(i, j, k + 1)])) / c;
+                    int index = IX(i, j, k);  // Precompute index for x and x0
+                    int leftIndex   = (i > 1) ? IX(i - 1, j, k) : index; // Index for left neighbor
+                    int rightIndex  = (i < M) ? IX(i + 1, j, k) : index; // Index for right neighbor
+                    int belowIndex  = (j > 1) ? IX(i, j - 1, k) : index; // Index for below neighbor
+                    int aboveIndex  = (j < N) ? IX(i, j + 1, k) : index; // Index for above neighbor
+                    int backIndex   = (k > 1) ? IX(i, j, k - 1) : index; // Index for back neighbor
+                    int frontIndex  = (k < O) ? IX(i, j, k + 1) : index; // Index for front neighbor
 
-                    if (l % check_frequency == 0) {
-                        max_diff = fmaxf(max_diff, fabsf(x[idx] - x_old));
-                    }
+                    // Fetch x0 value once and store neighbors in temporary variables
+                    float currentValue = x0[index];
+                    float left   = x[leftIndex];
+                    float right  = x[rightIndex];
+                    float below  = x[belowIndex];
+                    float above  = x[aboveIndex];
+                    float back   = x[backIndex];
+                    float front  = x[frontIndex];
+
+                    // Compute the new value for x
+                    x[index] = (currentValue + a * (left + right + below + above + back + front)) / c;
                 }
             }
         }
         set_bnd(M, N, O, b, x);
-
-        if (l % check_frequency == 0 && max_diff < tolerance) {
-            break;
-        }
     }
 }
-
-
-
 
 // Diffusion step (uses implicit method)
 void diffuse(int M, int N, int O, int b, float *x, float *x0, float diff,
@@ -101,49 +96,45 @@ void diffuse(int M, int N, int O, int b, float *x, float *x0, float diff,
 // Advection step (uses velocity field to move quantities)
 void advect(int M, int N, int O, int b, float *d, float *d0, float *u, float *v,
             float *w, float dt) {
-  float dtX = dt * M, dtY = dt * N, dtZ = dt * O;
+    float dtX = dt * M, dtY = dt * N, dtZ = dt * O;
 
-  for (int i = 1; i <= M; i++) {
-    for (int j = 1; j <= N; j++) {
-      for (int k = 1; k <= O; k++) {
-        float x = i - dtX * u[IX(i, j, k)];
-        float y = j - dtY * v[IX(i, j, k)];
-        float z = k - dtZ * w[IX(i, j, k)];
+    for (int i = 1; i <= M; i++) {
+        for (int j = 1; j <= N; j++) {
+            for (int k = 1; k <= O; k++) {
+                int index = IX(i, j, k); // Precompute index for d and d0
+                float u_val = u[index]; // Fetch u only once
+                float v_val = v[index]; // Fetch v only once
+                float w_val = w[index]; // Fetch w only once
 
-        // Clamp to grid boundaries
-        if (x < 0.5f)
-          x = 0.5f;
-        if (x > M + 0.5f)
-          x = M + 0.5f;
-        if (y < 0.5f)
-          y = 0.5f;
-        if (y > N + 0.5f)
-          y = N + 0.5f;
-        if (z < 0.5f)
-          z = 0.5f;
-        if (z > O + 0.5f)
-          z = O + 0.5f;
+                float x = i - dtX * u_val;
+                float y = j - dtY * v_val;
+                float z = k - dtZ * w_val;
 
-        int i0 = (int)x, i1 = i0 + 1;
-        int j0 = (int)y, j1 = j0 + 1;
-        int k0 = (int)z, k1 = k0 + 1;
+                // Clamp to grid boundaries
+                x = (x < 0.5f) ? 0.5f : (x > M + 0.5f) ? M + 0.5f : x;
+                y = (y < 0.5f) ? 0.5f : (y > N + 0.5f) ? N + 0.5f : y;
+                z = (z < 0.5f) ? 0.5f : (z > O + 0.5f) ? O + 0.5f : z;
 
-        float s1 = x - i0, s0 = 1 - s1;
-        float t1 = y - j0, t0 = 1 - t1;
-        float u1 = z - k0, u0 = 1 - u1;
+                int i0 = (int)x, i1 = i0 + 1;
+                int j0 = (int)y, j1 = j0 + 1;
+                int k0 = (int)z, k1 = k0 + 1;
 
-        d[IX(i, j, k)] =
-            s0 * (t0 * (u0 * d0[IX(i0, j0, k0)] + u1 * d0[IX(i0, j0, k1)]) +
-                  t1 * (u0 * d0[IX(i0, j1, k0)] + u1 * d0[IX(i0, j1, k1)])) +
-            s1 * (t0 * (u0 * d0[IX(i1, j0, k0)] + u1 * d0[IX(i1, j0, k1)]) +
-                  t1 * (u0 * d0[IX(i1, j1, k0)] + u1 * d0[IX(i1, j1, k1)]));
-      }
+                float s1 = x - i0, s0 = 1 - s1;
+                float t1 = y - j0, t0 = 1 - t1;
+                float u1 = z - k0, u0 = 1 - u1;
+
+                // Use precomputed indices to minimize memory access
+                d[index] =
+                    s0 * (t0 * (u0 * d0[IX(i0, j0, k0)] + u1 * d0[IX(i0, j0, k1)]) +
+                          t1 * (u0 * d0[IX(i0, j1, k0)] + u1 * d0[IX(i0, j1, k1)])) +
+                    s1 * (t0 * (u0 * d0[IX(i1, j0, k0)] + u1 * d0[IX(i1, j0, k1)]) +
+                          t1 * (u0 * d0[IX(i1, j1, k0)] + u1 * d0[IX(i1, j1, k1)]));
+            }
+        }
     }
-  }
-  set_bnd(M, N, O, b, d);
+    set_bnd(M, N, O, b, d);
 }
 
-/// OTIMIZAR !!!!!!!!!!!!!!!!!!! ///
 // Projection step to ensure incompressibility (make the velocity field
 // divergence-free)
 void project(int M, int N, int O, float *u, float *v, float *w, float *p,
