@@ -53,28 +53,31 @@ void set_bnd(int M, int N, int O, int b, float *x) {
                                     x[IX(M + 1, N + 1, 1)]);
 }
 
-// Linear solve for implicit methods (diffusion)
 void lin_solve(int M, int N, int O, int b, float *x, float *x0, float a, float c) {
+    float left, right, below, above, back, front, currentValue;
+    
     for (int l = 0; l < LINEARSOLVERTIMES; l++) {
-        for (int i = 1; i <= M; i++) {
+        for (int k = 1; k <= O; k++) {
             for (int j = 1; j <= N; j++) {
-                for (int k = 1; k <= O; k++) {
-                    int index = IX(i, j, k);  // Precompute index for x and x0
-                    int leftIndex   = (i > 1) ? IX(i - 1, j, k) : index; // Index for left neighbor
-                    int rightIndex  = (i < M) ? IX(i + 1, j, k) : index; // Index for right neighbor
-                    int belowIndex  = (j > 1) ? IX(i, j - 1, k) : index; // Index for below neighbor
-                    int aboveIndex  = (j < N) ? IX(i, j + 1, k) : index; // Index for above neighbor
-                    int backIndex   = (k > 1) ? IX(i, j, k - 1) : index; // Index for back neighbor
-                    int frontIndex  = (k < O) ? IX(i, j, k + 1) : index; // Index for front neighbor
+                for (int i = 1; i <= M; i++) {
+                    int index = IX(i, j, k);
+                    
+                    // Precompute neighbor indices
+                    int leftIndex   = (i > 1) ? IX(i - 1, j, k) : index;
+                    int rightIndex  = (i < M) ? IX(i + 1, j, k) : index;
+                    int belowIndex  = (j > 1) ? IX(i, j - 1, k) : index;
+                    int aboveIndex  = (j < N) ? IX(i, j + 1, k) : index;
+                    int backIndex   = (k > 1) ? IX(i, j, k - 1) : index;
+                    int frontIndex  = (k < O) ? IX(i, j, k + 1) : index;
 
-                    // Fetch x0 value once and store neighbors in temporary variables
-                    float currentValue = x0[index];
-                    float left   = x[leftIndex];
-                    float right  = x[rightIndex];
-                    float below  = x[belowIndex];
-                    float above  = x[aboveIndex];
-                    float back   = x[backIndex];
-                    float front  = x[frontIndex];
+                    // Store x0 value and neighbors in temporary variables
+                    currentValue = x0[index];
+                    left   = x[leftIndex];
+                    right  = x[rightIndex];
+                    below  = x[belowIndex];
+                    above  = x[aboveIndex];
+                    back   = x[backIndex];
+                    front  = x[frontIndex];
 
                     // Compute the new value for x
                     x[index] = (currentValue + a * (left + right + below + above + back + front)) / c;
@@ -137,15 +140,16 @@ void advect(int M, int N, int O, int b, float *d, float *d0, float *u, float *v,
 
 // Projection step to ensure incompressibility (make the velocity field
 // divergence-free)
-void project(int M, int N, int O, float *u, float *v, float *w, float *p,
-             float *div) {
-  for (int i = 1; i <= M; i++) {
+void project(int M, int N, int O, float *u, float *v, float *w, float *p, float *div) {
+  // Calculate divergence and initialize pressure field
+  for (int k = 1; k <= O; k++) {
     for (int j = 1; j <= N; j++) {
-      for (int k = 1; k <= O; k++) {
+      for (int i = 1; i <= M; i++) {
         div[IX(i, j, k)] =
             -0.5f *
-            (u[IX(i + 1, j, k)] - u[IX(i - 1, j, k)] + v[IX(i, j + 1, k)] -
-             v[IX(i, j - 1, k)] + w[IX(i, j, k + 1)] - w[IX(i, j, k - 1)]) /
+            (u[IX(i + 1, j, k)] - u[IX(i - 1, j, k)] +
+             v[IX(i, j + 1, k)] - v[IX(i, j - 1, k)] +
+             w[IX(i, j, k + 1)] - w[IX(i, j, k - 1)]) /
             MAX(M, MAX(N, O));
         p[IX(i, j, k)] = 0;
       }
@@ -156,15 +160,17 @@ void project(int M, int N, int O, float *u, float *v, float *w, float *p,
   set_bnd(M, N, O, 0, p);
   lin_solve(M, N, O, 0, p, div, 1, 6);
 
-  for (int i = 1; i <= M; i++) {
+  // Update velocity fields based on pressure
+  for (int k = 1; k <= O; k++) {
     for (int j = 1; j <= N; j++) {
-      for (int k = 1; k <= O; k++) {
+      for (int i = 1; i <= M; i++) {
         u[IX(i, j, k)] -= 0.5f * (p[IX(i + 1, j, k)] - p[IX(i - 1, j, k)]);
         v[IX(i, j, k)] -= 0.5f * (p[IX(i, j + 1, k)] - p[IX(i, j - 1, k)]);
         w[IX(i, j, k)] -= 0.5f * (p[IX(i, j, k + 1)] - p[IX(i, j, k - 1)]);
       }
     }
   }
+
   set_bnd(M, N, O, 1, u);
   set_bnd(M, N, O, 2, v);
   set_bnd(M, N, O, 3, w);
