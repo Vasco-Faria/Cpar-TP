@@ -1,5 +1,6 @@
 #include "fluid_solver.h"
 #include <cmath>
+#include <omp.h>
 
 #define IX(i, j, k) ((i) + (M + 2) * (j) + (M + 2) * (N + 2) * (k))
 #define SWAP(x0, x)                                                            \
@@ -54,9 +55,9 @@ void set_bnd(int M, int N, int O, int b, float *x) {
 }
 
 // Linear solve for implicit methods (diffusion)
-void lin_solve(int M, int N, int O, int b, float *x, float *x0, float a,
-               float c) {
+void lin_solve(int M, int N, int O, int b, float *x, float *x0, float a, float c) {
   for (int l = 0; l < LINEARSOLVERTIMES; l++) {
+    #pragma omp parallel for collapse(3) 
     for (int i = 1; i <= M; i++) {
       for (int j = 1; j <= N; j++) {
         for (int k = 1; k <= O; k++) {
