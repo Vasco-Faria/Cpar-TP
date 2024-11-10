@@ -57,15 +57,19 @@ void set_bnd(int M, int N, int O, int b, float *x) {
 // Linear solve for implicit methods (diffusion)
 void lin_solve(int M, int N, int O, int b, float *x, float *x0, float a, float c) {
   for (int l = 0; l < LINEARSOLVERTIMES; l++) {
-    #pragma omp parallel for collapse(3) 
+    #pragma omp parallel for collapse(2)
     for (int i = 1; i <= M; i++) {
       for (int j = 1; j <= N; j++) {
         for (int k = 1; k <= O; k++) {
-          x[IX(i, j, k)] = (x0[IX(i, j, k)] +
-                            a * (x[IX(i - 1, j, k)] + x[IX(i + 1, j, k)] +
-                                 x[IX(i, j - 1, k)] + x[IX(i, j + 1, k)] +
-                                 x[IX(i, j, k - 1)] + x[IX(i, j, k + 1)])) /
-                           c;
+          int idx = IX(i, j, k);
+          float x_prev = x[IX(i - 1, j, k)];
+          float x_next = x[IX(i + 1, j, k)];
+          float y_prev = x[IX(i, j - 1, k)];
+          float y_next = x[IX(i, j + 1, k)];
+          float z_prev = x[IX(i, j, k - 1)];
+          float z_next = x[IX(i, j, k + 1)];
+
+          x[idx] = (x0[idx] + a * (x_prev + x_next + y_prev + y_next + z_prev + z_next)) / c;
         }
       }
     }
