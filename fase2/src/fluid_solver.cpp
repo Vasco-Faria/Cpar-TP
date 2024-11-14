@@ -1,6 +1,7 @@
 #include "fluid_solver.h"
 #include <cmath>
 #include <omp.h>
+#include <algorithm>
 
 #define IX(i, j, k) ((i) + (M + 2) * (j) + (M + 2) * (N + 2) * (k))
 #define SWAP(x0, x)                                                            \
@@ -14,10 +15,11 @@
 
 // Add sources (density or velocity)
 void add_source(int M, int N, int O, float *x, float *s, float dt) {
-  int size = (M + 2) * (N + 2) * (O + 2);
-  for (int i = 0; i < size; i++) {
-    x[i] += dt * s[i];
-  }
+    int size = (M + 2) * (N + 2) * (O + 2);
+    #pragma omp parallel for
+    for (int i = 0; i < size; i++) {
+        x[i] += dt * s[i];
+    }
 }
 
 // Set boundary conditions
@@ -31,12 +33,14 @@ void set_bnd(int M, int N, int O, int b, float *x) {
       x[IX(i, j, O + 1)] = b == 3 ? -x[IX(i, j, O)] : x[IX(i, j, O)];
     }
   }
+
   for (i = 1; i <= N; i++) {
     for (j = 1; j <= O; j++) {
       x[IX(0, i, j)] = b == 1 ? -x[IX(1, i, j)] : x[IX(1, i, j)];
       x[IX(M + 1, i, j)] = b == 1 ? -x[IX(M, i, j)] : x[IX(M, i, j)];
     }
   }
+  
   for (i = 1; i <= M; i++) {
     for (j = 1; j <= O; j++) {
       x[IX(i, 0, j)] = b == 2 ? -x[IX(i, 1, j)] : x[IX(i, 1, j)];
@@ -54,27 +58,50 @@ void set_bnd(int M, int N, int O, int b, float *x) {
                                     x[IX(M + 1, N + 1, 1)]);
 }
 
-// Linear solve for implicit methods (diffusion)
+// Red-black solver with convergence check optimized with OpenMP
 void lin_solve(int M, int N, int O, int b, float *x, float *x0, float a, float c) {
-  for (int l = 0; l < LINEARSOLVERTIMES; l++) {
-    #pragma omp parallel for collapse(2)
-    for (int i = 1; i <= M; i++) {
-      for (int j = 1; j <= N; j++) {
-        for (int k = 1; k <= O; k++) {
-          int idx = IX(i, j, k);
-          float x_prev = x[IX(i - 1, j, k)];
-          float x_next = x[IX(i + 1, j, k)];
-          float y_prev = x[IX(i, j - 1, k)];
-          float y_next = x[IX(i, j + 1, k)];
-          float z_prev = x[IX(i, j, k - 1)];
-          float z_next = x[IX(i, j, k + 1)];
+    float tol = 1e-7, max_c, old_x, change;
+    int l = 0;
+    
+    do {
+        max_c = 0.0f;
 
-          x[idx] = (x0[idx] + a * (x_prev + x_next + y_prev + y_next + z_prev + z_next)) / c;
+        #pragma omp parallel for collapse(2) reduction(max:max_c) private(old_x, change)
+        for (int k = 1; k <= O; k++) {
+            for (int j = 1; j <= N; j++) {
+                for (int i = 1; i <= M; i++) {
+                    if ((i + j + k) % 2 == 1) {
+                        old_x = x[IX(i, j, k)];
+                        x[IX(i, j, k)] = (x0[IX(i, j, k)] +
+                                          a * (x[IX(i - 1, j, k)] + x[IX(i + 1, j, k)] +
+                                               x[IX(i, j - 1, k)] + x[IX(i, j + 1, k)] +
+                                               x[IX(i, j, k - 1)] + x[IX(i, j, k + 1)])) / c;
+                        change = fabs(x[IX(i, j, k)] - old_x);
+                        if (change > max_c) max_c = change;
+                    }
+                }
+            }
         }
-      }
-    }
-    set_bnd(M, N, O, b, x);
-  }
+
+        #pragma omp parallel for collapse(2) reduction(max:max_c) private(old_x, change)
+        for (int k = 1; k <= O; k++) {
+            for (int j = 1; j <= N; j++) {
+                for (int i = 1; i <= M; i++) {
+                    if ((i + j + k) % 2 == 0) {
+                        old_x = x[IX(i, j, k)];
+                        x[IX(i, j, k)] = (x0[IX(i, j, k)] +
+                                          a * (x[IX(i - 1, j, k)] + x[IX(i + 1, j, k)] +
+                                               x[IX(i, j - 1, k)] + x[IX(i, j + 1, k)] +
+                                               x[IX(i, j, k - 1)] + x[IX(i, j, k + 1)])) / c;
+                        change = fabs(x[IX(i, j, k)] - old_x);
+                        if (change > max_c) max_c = change;
+                    }
+                }
+            }
+        }
+
+        set_bnd(M, N, O, b, x);
+    } while (max_c > tol && ++l < LINEARSOLVERTIMES);
 }
 
 // Diffusion step (uses implicit method)
@@ -86,48 +113,44 @@ void diffuse(int M, int N, int O, int b, float *x, float *x0, float diff,
 }
 
 // Advection step (uses velocity field to move quantities)
-void advect(int M, int N, int O, int b, float *d, float *d0, float *u, float *v,
-            float *w, float dt) {
-  float dtX = dt * M, dtY = dt * N, dtZ = dt * O;
+void advect(int M, int N, int O, int b, float *d, float *d0, float *u, float *v, float *w, float dt) {
+    int i, j, k, i0, j0, k0, i1, j1, k1;
+    float x, y, z, s0, t0, r0, s1, t1, r1, dt0;
 
-  for (int i = 1; i <= M; i++) {
-    for (int j = 1; j <= N; j++) {
-      for (int k = 1; k <= O; k++) {
-        float x = i - dtX * u[IX(i, j, k)];
-        float y = j - dtY * v[IX(i, j, k)];
-        float z = k - dtZ * w[IX(i, j, k)];
+    dt0 = dt * M;
+    #pragma omp parallel for collapse(2) private(i0, j0, k0, i1, j1, k1, x, y, z, s0, t0, r0, s1, t1, r1)
+    for (k = 1; k <= O; k++) {
+        for (j = 1; j <= N; j++) {
+            for (i = 1; i <= M; i++) {
+                x = i - dt0 * u[IX(i, j, k)];
+                y = j - dt0 * v[IX(i, j, k)];
+                z = k - dt0 * w[IX(i, j, k)];
 
-        // Clamp to grid boundaries
-        if (x < 0.5f)
-          x = 0.5f;
-        if (x > M + 0.5f)
-          x = M + 0.5f;
-        if (y < 0.5f)
-          y = 0.5f;
-        if (y > N + 0.5f)
-          y = N + 0.5f;
-        if (z < 0.5f)
-          z = 0.5f;
-        if (z > O + 0.5f)
-          z = O + 0.5f;
+                if (x < 0.5f) x = 0.5f; 
+                if (x > M + 0.5f) x = M + 0.5f; 
+                i0 = (int)x; i1 = i0 + 1;
 
-        int i0 = (int)x, i1 = i0 + 1;
-        int j0 = (int)y, j1 = j0 + 1;
-        int k0 = (int)z, k1 = k0 + 1;
+                if (y < 0.5f) y = 0.5f; 
+                if (y > N + 0.5f) y = N + 0.5f; 
+                j0 = (int)y; j1 = j0 + 1;
 
-        float s1 = x - i0, s0 = 1 - s1;
-        float t1 = y - j0, t0 = 1 - t1;
-        float u1 = z - k0, u0 = 1 - u1;
+                if (z < 0.5f) z = 0.5f; 
+                if (z > O + 0.5f) z = O + 0.5f; 
+                k0 = (int)z; k1 = k0 + 1;
 
-        d[IX(i, j, k)] =
-            s0 * (t0 * (u0 * d0[IX(i0, j0, k0)] + u1 * d0[IX(i0, j0, k1)]) +
-                  t1 * (u0 * d0[IX(i0, j1, k0)] + u1 * d0[IX(i0, j1, k1)])) +
-            s1 * (t0 * (u0 * d0[IX(i1, j0, k0)] + u1 * d0[IX(i1, j0, k1)]) +
-                  t1 * (u0 * d0[IX(i1, j1, k0)] + u1 * d0[IX(i1, j1, k1)]));
-      }
+                s1 = x - i0; s0 = 1 - s1;
+                t1 = y - j0; t0 = 1 - t1;
+                r1 = z - k0; r0 = 1 - r1;
+
+                d[IX(i, j, k)] = s0 * (t0 * (r0 * d0[IX(i0, j0, k0)] + r1 * d0[IX(i0, j0, k1)]) +
+                                       t1 * (r0 * d0[IX(i0, j1, k0)] + r1 * d0[IX(i0, j1, k1)])) +
+                                 s1 * (t0 * (r0 * d0[IX(i1, j0, k0)] + r1 * d0[IX(i1, j0, k1)]) +
+                                       t1 * (r0 * d0[IX(i1, j1, k0)] + r1 * d0[IX(i1, j1, k1)]));
+            }
+        }
     }
-  }
-  set_bnd(M, N, O, b, d);
+
+    set_bnd(M, N, O, b, d);
 }
 
 // Projection step to ensure incompressibility (make the velocity field
