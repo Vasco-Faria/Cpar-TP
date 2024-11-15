@@ -1,4 +1,7 @@
 .vscode
 fluid_sim
+fluid_sim_par
+fluid_sim_seq
 gmon.out
 gprof_report.txt
+*.o
