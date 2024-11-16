@@ -1,6 +1,6 @@
 # Compiler and flags
 CPP = g++
-CFLAGS = -Wall -Wextra -g -fno-omit-frame-pointer -march=native -funroll-loops -ffast-math -fopt-info -Ofast -fprefetch-loop-arrays -ftree-vectorize -fno-omit-frame-pointer
+CFLAGS = -Wall -Wextra -g -lm -fno-omit-frame-pointer -march=native -funroll-loops -ffast-math -fopt-info -Ofast -fprefetch-loop-arrays -ftree-vectorize
 OMPFLAGS = -fopenmp
 
 # Source files and object files
@@ -17,22 +17,18 @@ all: $(EXEC_SEQ) $(EXEC_PAR)
 
 # Link object files to create the sequential executable
 $(EXEC_SEQ): $(OBJS_SEQ)
-
 	$(CPP) $(OMPFLAGS) $(OBJS_SEQ) $(LDFLAGS) -o $@
 
 # Link object files to create the parallel executable
 $(EXEC_PAR): $(OBJS_PAR)
-
 	$(CPP) $(OMPFLAGS) $(OBJS_PAR) $(LDFLAGS) -o $@
 
 # Compile .cpp files into .o files for the sequential version
 %_seq.o: %.cpp
-
 	$(CPP) $(CFLAGS) -c $< -o $@
 
 # Compile .cpp files into .o files for the parallel version
 %_par.o: %.cpp
-
 	$(CPP) $(CFLAGS) $(OMPFLAGS) -c $< -o $@
 
 # Clean target to remove generated files
@@ -44,9 +40,6 @@ clean:
 # Run target for the parallel version with performance measurement
 runpar:
 	export OMP_NUM_THREADS=20; srun --partition=cpar --exclusive perf stat -r 3 -M cpi,instructions -e branch-misses,L1-dcache-loads,L1-dcache-load-misses,cycles,duration_time,mem-loads,mem-stores ./$(EXEC_PAR)
-	
-perf:
-	export OMP_NUM_THREADS=20; perf stat -e cache-misses,cache-references,instructions,cycles ./fluid_sim_par
 
 # Run target for the sequential version with performance measurement
 runseq:
@@ -64,4 +57,3 @@ EventManager_par.o: EventManager.h
 
 # Phony targets
 .PHONY: all clean runpar runseq
-
