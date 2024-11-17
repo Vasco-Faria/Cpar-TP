@@ -4,62 +4,51 @@
 #include <algorithm>
 
 #define IX(i, j, k) ((i) + (M + 2) * (j) + (M + 2) * (N + 2) * (k))
-#define SWAP(x0, x)                                                            \
-  {                                                                            \
-    float *tmp = x0;                                                           \
-    x0 = x;                                                                    \
-    x = tmp;                                                                   \
-  }
+#define SWAP(x0, x) { float *tmp = x0; x0 = x; x = tmp; }
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
-// Add sources (density or velocity)
 void add_source(int M, int N, int O, float *x, float *s, float dt) {
     int size = (M + 2) * (N + 2) * (O + 2);
-    #pragma omp parallel for
+    #pragma omp parallel for simd schedule(static)
     for (int i = 0; i < size; i++) {
         x[i] += dt * s[i];
     }
 }
 
-// Set boundary conditions
 void set_bnd(int M, int N, int O, int b, float *x) {
-  int i, j;
+  #pragma omp parallel 
+  {
+    #pragma omp for schedule(static)
+    for (int j = 1; j <= N; j++) {
+        for (int i = 1; i <= M; i++) {
+            x[IX(i, j, 0)] = b == 3 ? -x[IX(i, j, 1)] : x[IX(i, j, 1)];
+            x[IX(i, j, O + 1)] = b == 3 ? -x[IX(i, j, O)] : x[IX(i, j, O)];
+        }
+    }
 
-  #pragma omp parallel for schedule(static)
-  for (int j = 1; j <= N; j++) {
-      for (int i = 1; i <= M; i++) {
-          x[IX(i, j, 0)] = b == 3 ? -x[IX(i, j, 1)] : x[IX(i, j, 1)];
-          x[IX(i, j, O + 1)] = b == 3 ? -x[IX(i, j, O)] : x[IX(i, j, O)];
-      }
+    #pragma omp for schedule(static)
+    for (int j = 1; j <= O; j++) {
+        for (int i = 1; i <= N; i++) {
+            x[IX(0, i, j)] = b == 1 ? -x[IX(1, i, j)] : x[IX(1, i, j)];
+            x[IX(M + 1, i, j)] = b == 1 ? -x[IX(M, i, j)] : x[IX(M, i, j)];
+        }
+    }
+
+    #pragma omp for schedule(static)
+    for (int j = 1; j <= O; j++) {
+        for (int i = 1; i <= M; i++) {
+            x[IX(i, 0, j)] = b == 2 ? -x[IX(i, 1, j)] : x[IX(i, 1, j)];
+            x[IX(i, N + 1, j)] = b == 2 ? -x[IX(i, N, j)] : x[IX(i, N, j)];
+        }
+    }
   }
-
-  #pragma omp parallel for schedule(static)
-  for (int j = 1; j <= O; j++) {
-      for (int i = 1; i <= N; i++) {
-          x[IX(0, i, j)] = b == 1 ? -x[IX(1, i, j)] : x[IX(1, i, j)];
-          x[IX(M + 1, i, j)] = b == 1 ? -x[IX(M, i, j)] : x[IX(M, i, j)];
-      }
-  }
-
-  #pragma omp parallel for schedule(static)
-  for (int j = 1; j <= O; j++) {
-      for (int i = 1; i <= M; i++) {
-          x[IX(i, 0, j)] = b == 2 ? -x[IX(i, 1, j)] : x[IX(i, 1, j)];
-          x[IX(i, N + 1, j)] = b == 2 ? -x[IX(i, N, j)] : x[IX(i, N, j)];
-      }
-  }
-
-  // Set corners
+  
   x[IX(0, 0, 0)] = 0.33f * (x[IX(1, 0, 0)] + x[IX(0, 1, 0)] + x[IX(0, 0, 1)]);
-  x[IX(M + 1, 0, 0)] =
-      0.33f * (x[IX(M, 0, 0)] + x[IX(M + 1, 1, 0)] + x[IX(M + 1, 0, 1)]);
-  x[IX(0, N + 1, 0)] =
-      0.33f * (x[IX(1, N + 1, 0)] + x[IX(0, N, 0)] + x[IX(0, N + 1, 1)]);
-  x[IX(M + 1, N + 1, 0)] = 0.33f * (x[IX(M, N + 1, 0)] + x[IX(M + 1, N, 0)] +
-                                    x[IX(M + 1, N + 1, 1)]);
+  x[IX(M + 1, 0, 0)] = 0.33f * (x[IX(M, 0, 0)] + x[IX(M + 1, 1, 0)] + x[IX(M + 1, 0, 1)]);
+  x[IX(0, N + 1, 0)] = 0.33f * (x[IX(1, N + 1, 0)] + x[IX(0, N, 0)] + x[IX(0, N + 1, 1)]);
+  x[IX(M + 1, N + 1, 0)] = 0.33f * (x[IX(M, N + 1, 0)] + x[IX(M + 1, N, 0)] + x[IX(M + 1, N + 1, 1)]);
 }
 
-// Red-black solver with convergence check optimized with OpenMP
 void lin_solve(int M, int N, int O, int b, float *x, float *x0, float a, float c) {
     float tol = 1e-7, max_c, old_x, change;
     int l = 0;
@@ -71,15 +60,17 @@ void lin_solve(int M, int N, int O, int b, float *x, float *x0, float a, float c
         #pragma omp parallel for collapse(2) schedule(static) reduction(max:max_c) private(old_x, change)
         for (int k = 1; k <= O; k++) {
             for (int j = 1; j <= N; j++) {
+                int sum = k + j;
                 for (int i = 1; i <= M; i++) {
-                    if ((i + j + k) % 2 == 1) {
-                        old_x = x[IX(i, j, k)];
-                        x[IX(i, j, k)] = (x0[IX(i, j, k)] +
+                    int index = IX(i, j, k);
+                    if ((i + sum) % 2 == 1) {
+                        old_x = x[index];
+                        x[index] = (x0[index] +
                                           a * (x[IX(i - 1, j, k)] + x[IX(i + 1, j, k)] +
                                                x[IX(i, j - 1, k)] + x[IX(i, j + 1, k)] +
                                                x[IX(i, j, k - 1)] + x[IX(i, j, k + 1)])) * inverso_c;
-                        change = fabs(x[IX(i, j, k)] - old_x);
-                        if (change > max_c) max_c = change;
+                        change = fabs(x[index] - old_x);
+                        max_c = std::max(max_c, change);
                     }
                 }
             }
@@ -88,51 +79,48 @@ void lin_solve(int M, int N, int O, int b, float *x, float *x0, float a, float c
         #pragma omp parallel for collapse(2) schedule(static) reduction(max:max_c) private(old_x, change)
         for (int k = 1; k <= O; k++) {
             for (int j = 1; j <= N; j++) {
+                int sum = k + j;
                 for (int i = 1; i <= M; i++) {
-                    if ((i + j + k) % 2 == 0) {
-                        old_x = x[IX(i, j, k)];
-                        x[IX(i, j, k)] = (x0[IX(i, j, k)] +
+                    int index = IX(i, j, k);
+                    if ((i + sum) % 2 == 0) {
+                        old_x = x[index];
+                        x[index] = (x0[index] +
                                           a * (x[IX(i - 1, j, k)] + x[IX(i + 1, j, k)] +
                                                x[IX(i, j - 1, k)] + x[IX(i, j + 1, k)] +
                                                x[IX(i, j, k - 1)] + x[IX(i, j, k + 1)])) * inverso_c;
-                        change = fabs(x[IX(i, j, k)] - old_x);
-                        if (change > max_c) max_c = change;
+                        change = fabs(x[index] - old_x);
+                        max_c = std::max(max_c, change);
                     }
                 }
             }
         }
 
         set_bnd(M, N, O, b, x);
-    } 
-
-    while (max_c > tol && ++l < 20);
+    } while (max_c > tol && ++l < 20);
 }
 
-// Diffusion step (uses implicit method)
 void diffuse(int M, int N, int O, int b, float *x, float *x0, float diff, float dt) {
-  int max = MAX(M, MAX(N, O));
-  float a = dt * diff * max * max;
-  lin_solve(M, N, O, b, x, x0, a, 1 + 6 * a);
+    int max = MAX(M, MAX(N, O));
+    float a = dt * diff * max * max;
+    lin_solve(M, N, O, b, x, x0, a, 1 + 6 * a);
 }
 
 void advect(int M, int N, int O, int b, float *d, float *d0, float *u, float *v, float *w, float dt) {
     float dtX = dt * M, dtY = dt * N, dtZ = dt * O;
 
-    // Parallelize the outermost loop using OpenMP
     #pragma omp parallel for collapse(2) schedule(static)
     for (int k = 1; k <= O; k++) {
         for (int j = 1; j <= N; j++) {
             for (int i = 1; i <= M; i++) {
-                int index = IX(i, j, k); // Precompute index for d and d0
-                float u_val = u[index]; // Fetch u only once
-                float v_val = v[index]; // Fetch v only once
-                float w_val = w[index]; // Fetch w only once
+                int index = IX(i, j, k);
+                float u_val = u[index];
+                float v_val = v[index];
+                float w_val = w[index];
 
                 float x = i - dtX * u_val;
                 float y = j - dtY * v_val;
                 float z = k - dtZ * w_val;
 
-                // Clamp to grid boundaries
                 x = fmaxf(0.5f, fminf(x, M + 0.5f));
                 y = fmaxf(0.5f, fminf(y, N + 0.5f));
                 z = fmaxf(0.5f, fminf(z, O + 0.5f));
@@ -145,15 +133,14 @@ void advect(int M, int N, int O, int b, float *d, float *d0, float *u, float *v,
                 float t1 = y - j0, t0 = 1 - t1;
                 float u1 = z - k0, u0 = 1 - u1;
 
-                // Use precomputed indices to minimize memory access
-                d[index] =
-                    s0 * (t0 * (u0 * d0[IX(i0, j0, k0)] + u1 * d0[IX(i0, j0, k1)]) +
-                          t1 * (u0 * d0[IX(i0, j1, k0)] + u1 * d0[IX(i0, j1, k1)])) +
-                    s1 * (t0 * (u0 * d0[IX(i1, j0, k0)] + u1 * d0[IX(i1, j0, k1)]) +
-                          t1 * (u0 * d0[IX(i1, j1, k0)] + u1 * d0[IX(i1, j1, k1)]));
+                d[index] = s0 * (t0 * (u0 * d0[IX(i0, j0, k0)] + u1 * d0[IX(i0, j0, k1)]) +
+                                 t1 * (u0 * d0[IX(i0, j1, k0)] + u1 * d0[IX(i0, j1, k1)])) +
+                           s1 * (t0 * (u0 * d0[IX(i1, j0, k0)] + u1 * d0[IX(i1, j0, k1)]) +
+                                 t1 * (u0 * d0[IX(i1, j1, k0)] + u1 * d0[IX(i1, j1, k1)]));
             }
         }
     }
+
     set_bnd(M, N, O, b, d);
 }
 
@@ -162,7 +149,7 @@ void advect(int M, int N, int O, int b, float *d, float *d0, float *u, float *v,
 void project(int M, int N, int O, float *u, float *v, float *w, float *p, float *div) {
   // Calculate divergence and initialize pressure field
   float inverso_MNO = 1.0f / (MAX(M, MAX(N, O)));
-  #pragma omp parallel for collapse(2) schedule(static)
+  #pragma omp parallel for collapse(2) schedule(static) shared(u, v, w, p, div)
   for (int k = 1; k <= O; k++) {
     for (int j = 1; j <= N; j++) {
       for (int i = 1; i <= M; i++) {
