@@ -9,11 +9,10 @@ OBJS_SEQ = $(SRCS:.cpp=_seq.o)
 OBJS_PAR = $(SRCS:.cpp=_par.o)
 
 # Executable names
-EXEC_SEQ = fluid_sim_seq
-EXEC_PAR = fluid_sim_par
+EXEC_SEQ = src/fluid_sim_seq
+EXEC_PAR = src/fluid_sim_par
 
-all: 
-	module load gcc/11.2.0 && $(MAKE) par seq
+all: par seq
 
 par:
 	$(CPP) $(CFLAGS) $(OMPFLAGS) $(SRCS) -o $(EXEC_PAR)
@@ -23,10 +22,10 @@ seq:
 
 # Run the program
 runpar: $(EXEC_PAR)
-	./$(EXEC_PAR)
+	cd src && OMP_NUM_THREADS=40 time ./fluid_sim_par
 
 runseq: $(EXEC_SEQ)
-	./$(EXEC_SEQ)
+	cd src && ./fluid_sim_seq
 
 clean:
 	@echo Cleaning up...
