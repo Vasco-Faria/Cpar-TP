@@ -22,7 +22,7 @@ seq:
 
 # Run the program
 runpar: $(EXEC_PAR)
-	cd src && OMP_NUM_THREADS=40 time ./fluid_sim_par
+	cd src && OMP_NUM_THREADS=40 ./fluid_sim_par
 
 runseq: $(EXEC_SEQ)
 	cd src && ./fluid_sim_seq
