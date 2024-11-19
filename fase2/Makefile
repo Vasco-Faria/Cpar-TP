@@ -9,8 +9,8 @@ OBJS_SEQ = $(SRCS:.cpp=_seq.o)
 OBJS_PAR = $(SRCS:.cpp=_par.o)
 
 # Executable names
-EXEC_SEQ = src/fluid_sim_seq
-EXEC_PAR = src/fluid_sim_par
+EXEC_SEQ = fluid_sim_seq
+EXEC_PAR = fluid_sim_par
 
 all: par seq
 
@@ -22,10 +22,10 @@ seq:
 
 # Run the program
 runpar: $(EXEC_PAR)
-	cd src && OMP_NUM_THREADS=40 ./fluid_sim_par
+	OMP_NUM_THREADS=40 ./fluid_sim_par
 
 runseq: $(EXEC_SEQ)
-	cd src && ./fluid_sim_seq
+	./fluid_sim_seq
 
 clean:
 	@echo Cleaning up...

@@ -5,3 +5,4 @@ fluid_sim_seq
 gmon.out
 gprof_report.txt
 *.o
+*.exe
