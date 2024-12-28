@@ -106,7 +106,7 @@ __global__ void set_bnd_kernel(int M, int N, int O, int b, float* x) {
 void set_bnd(int M, int N, int O, int b, float *x) {
     cudaMemcpy(d_x, x, size, cudaMemcpyHostToDevice);
 
-    dim3 threadsPerBlock(8, 8, 8);
+    dim3 threadsPerBlock(64, 8, 2);
     dim3 numBlocks((M + threadsPerBlock.x - 1) / threadsPerBlock.x,
                    (N + threadsPerBlock.y - 1) / threadsPerBlock.y,
                    (O + threadsPerBlock.z - 1) / threadsPerBlock.z);
@@ -162,7 +162,7 @@ void lin_solve(int M, int N, int O, int b, float* x, const float* x0, float a, f
     cudaMemcpy(d_xx, x, size, cudaMemcpyHostToDevice);
     cudaMemcpy(d_x0, x0, size, cudaMemcpyHostToDevice);
 
-    dim3 threadsPerBlock(8, 8, 8);
+    dim3 threadsPerBlock(64, 8, 2);
     dim3 numBlocks((M + threadsPerBlock.x - 1) / threadsPerBlock.x,
                    (N + threadsPerBlock.y - 1) / threadsPerBlock.y,
                    (O + threadsPerBlock.z - 1) / threadsPerBlock.z);
@@ -230,7 +230,7 @@ void advect(int M, int N, int O, int b, float *d, float *d0, float *u, float *v,
     cudaMemcpy(d_v, v, size, cudaMemcpyHostToDevice);
     cudaMemcpy(d_w, w, size, cudaMemcpyHostToDevice);
 
-    dim3 threadsPerBlock(8, 8, 8);
+    dim3 threadsPerBlock(64, 8, 2);
     dim3 numBlocks((M + threadsPerBlock.x - 1) / threadsPerBlock.x,
                    (N + threadsPerBlock.y - 1) / threadsPerBlock.y,
                    (O + threadsPerBlock.z - 1) / threadsPerBlock.z);
@@ -244,7 +244,9 @@ void advect(int M, int N, int O, int b, float *d, float *d0, float *u, float *v,
     cudaMemcpy(d, d_d, size, cudaMemcpyDeviceToHost);
 }
 
-__global__ void compute_div_and_init_p(int M, int N, int O, float *u, float *v, float *w, float *p, float *div, float inverso_MNO) {
+__global__ void compute_div_and_init_p(int M, int N, int O, float *u, float *v, float *w, float *p, float *div) {
+    float inverso_MNO = 1.0f / (MAX(M, MAX(N, O)));
+
     int i = blockIdx.x * blockDim.x + threadIdx.x + 1;
     int j = blockIdx.y * blockDim.y + threadIdx.y + 1;
     int k = blockIdx.z * blockDim.z + threadIdx.z + 1;
@@ -275,20 +277,18 @@ __global__ void update_velocities(int M, int N, int O, float *u, float *v, float
 }
 
 void project(int M, int N, int O, float *u, float *v, float *w, float *p, float *div) {
-    float inverso_MNO = 1.0f / (MAX(M, MAX(N, O)));
-
     cudaMemcpy(d_uu, u, size, cudaMemcpyHostToDevice);
     cudaMemcpy(d_vv, v, size, cudaMemcpyHostToDevice);
     cudaMemcpy(d_ww, w, size, cudaMemcpyHostToDevice);
     cudaMemcpy(d_pp, p, size, cudaMemcpyHostToDevice);
     cudaMemcpy(d_div, div, size, cudaMemcpyHostToDevice);
 
-    dim3 threadsPerBlock(8, 8, 8);
+    dim3 threadsPerBlock(64, 8, 2);
     dim3 numBlocks((M + threadsPerBlock.x - 1) / threadsPerBlock.x,
                    (N + threadsPerBlock.y - 1) / threadsPerBlock.y,
                    (O + threadsPerBlock.z - 1) / threadsPerBlock.z);
 
-    compute_div_and_init_p<<<numBlocks, threadsPerBlock>>>(M, N, O, d_uu, d_vv, d_ww, d_pp, d_div, inverso_MNO);
+    compute_div_and_init_p<<<numBlocks, threadsPerBlock>>>(M, N, O, d_uu, d_vv, d_ww, d_pp, d_div);
     cudaDeviceSynchronize();
 
     set_bnd_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, 0, d_div);
