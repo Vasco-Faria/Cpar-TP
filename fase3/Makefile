@@ -2,7 +2,7 @@
 CPP = g++
 CUDA = nvcc
 CFLAGS = -Wall -Wextra -lm -march=native -funroll-loops -ffast-math -fopt-info -Ofast -ftree-vectorize -mavx
-CUDAFLAGS = -O3 -std=c++11 -arch=sm_35 -Wno-deprecated-gpu-targets -allow-unsupported-compiler
+CUDAFLAGS = -O3 -g -std=c++11 -arch=sm_35 -Wno-deprecated-gpu-targets -use_fast_math
 
 # Source files and object files
 SRCS = src/main.cpp src/EventManager.cpp
@@ -24,11 +24,6 @@ cuda:
 # Run the program
 runcuda: $(EXEC_CUDA)
 	./fluid_sim_cuda
-
-load:
-	@echo "Loading modules..."
-	@bash -c 'module load gcc/11.2.0 && module load cuda/11.3.1'
-	@echo "Modules loaded successfully"
 
 clean:
 	@echo Cleaning up...
