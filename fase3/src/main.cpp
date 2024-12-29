@@ -62,17 +62,17 @@ void free_data() {
 
 // Apply events (source or force) for the current timestep
 void apply_events(const std::vector<Event> &events) {
+  int i = M / 2, j = N / 2, k = O / 2;
+  int ix = IX(i, j, k);
   for (const auto &event : events) {
     if (event.type == ADD_SOURCE) {
       // Apply density source at the center of the grid
-      int i = M / 2, j = N / 2, k = O / 2;
-      dens[IX(i, j, k)] = event.density;
+      dens[ix] = event.density;
     } else if (event.type == APPLY_FORCE) {
-      // Apply forces based on the event's vector (fx, fy, fz)
-      int i = M / 2, j = N / 2, k = O / 2;
-      u[IX(i, j, k)] = event.force.x;
-      v[IX(i, j, k)] = event.force.y;
-      w[IX(i, j, k)] = event.force.z;
+      // Apply forces based on the event's vector (fx, fy, fz);
+      u[ix] = event.force.x;
+      v[ix] = event.force.y;
+      w[ix] = event.force.z;
     }
   }
 }
