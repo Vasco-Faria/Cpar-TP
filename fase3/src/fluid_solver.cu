@@ -24,20 +24,6 @@ float* v_w0 = nullptr;
 float* d_x = nullptr;
 float* d_x0 = nullptr;
 
-void cpy_host_to_device(float* u, float* v, float* w, float* dens) {
-    cudaMemcpy(v_u, u, size, cudaMemcpyHostToDevice);
-    cudaMemcpy(v_v, v, size, cudaMemcpyHostToDevice);
-    cudaMemcpy(v_w, w, size, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_x, dens, size, cudaMemcpyHostToDevice);
-}
-
-void cpy_device_to_host(float* u, float* v, float* w, float* dens) {
-    cudaMemcpy(u, v_u, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(v, v_v, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(w, v_w, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(dens, d_x, size, cudaMemcpyDeviceToHost);
-}
-
 void init_cuda_mallocs_vel(int M, int N, int O, float* u, float* v, float* w, float* u0, float* v0, float* w0) {
     size = (M + 2) * (N + 2) * (O + 2) * sizeof(float);
 
@@ -58,11 +44,7 @@ void init_cuda_mallocs_vel(int M, int N, int O, float* u, float* v, float* w, fl
     cudaMemcpy(v_w0, w0, size, cudaMemcpyHostToDevice);
 }
 
-void free_cuda_mallocs_vel(float* u, float* v, float* w, float* u0, float* v0, float* w0) {
-    cudaMemcpy(u0, v_u0, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(v0, v_v0, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(w0, v_w0, size, cudaMemcpyDeviceToHost);
-
+void free_cuda_mallocs_vel() {
     cudaFree(v_u0);
     cudaFree(v_v0);
     cudaFree(v_w0);
@@ -76,21 +58,13 @@ void init_cuda_mallocs_dens(float* x, float* x0) {
     cudaMemcpy(d_x0, x0, size, cudaMemcpyHostToDevice);
 }
 
-void free_cuda_mallocs_dens(float* x, float* x0, float* u, float* v, float* w) {
-    cudaMemcpy(x, d_x, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(x0, d_x0, size, cudaMemcpyDeviceToHost);
-
-    cudaMemcpy(u, v_u, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(v, v_v, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(w, v_w, size, cudaMemcpyDeviceToHost);
-
+void free_cuda_mallocs_dens() {
     cudaFree(max_change);
 
     cudaFree(v_u);
     cudaFree(v_v);
     cudaFree(v_w);
 
-    cudaFree(d_x);
     cudaFree(d_x0);
 }
 
