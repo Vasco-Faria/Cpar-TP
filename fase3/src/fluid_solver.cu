@@ -22,6 +22,20 @@ float* v_w0 = nullptr;
 float* d_x = nullptr;
 float* d_x0 = nullptr;
 
+void cpy_host_to_device(float* u, float* v, float* w, float* dens) {
+    cudaMemcpy(v_u, u, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(v_v, v, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(v_w, w, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_x, dens, size, cudaMemcpyHostToDevice);
+}
+
+void cpy_device_to_host(float* u, float* v, float* w, float* dens) {
+    cudaMemcpy(u, v_u, size, cudaMemcpyDeviceToHost);
+    cudaMemcpy(v, v_v, size, cudaMemcpyDeviceToHost);
+    cudaMemcpy(w, v_w, size, cudaMemcpyDeviceToHost);
+    cudaMemcpy(dens, d_x, size, cudaMemcpyDeviceToHost);
+}
+
 void init_cuda_mallocs_vel(int M, int N, int O, float* u, float* v, float* w, float* u0, float* v0, float* w0) {
     size = (M + 2) * (N + 2) * (O + 2) * sizeof(float);
     cudaMallocManaged((void**)&v_u, size);
@@ -74,21 +88,17 @@ void free_cuda_mallocs_dens(float* x, float* x0, float* u, float* v, float* w) {
 }
 
 __global__ void add_source_kernel(int M, int N, int O, float *x, float *s, float dt) {
-    int i = blockIdx.x * blockDim.x + threadIdx.x;
-    int j = blockIdx.y * blockDim.y + threadIdx.y;
-    int k = blockIdx.z * blockDim.z + threadIdx.z;
+    int i = blockIdx.x * blockDim.x + threadIdx.x + 1;
+    int size_ = (M + 2) * (N + 2) * (O + 2);
 
-    if (i < M && j < N && k < O) {
-        int index = IX(i, j, k);
-        x[index] += dt * s[index];
+    if (i < size_) {
+        x[i] += dt * s[i];
     }
 }
 
 void add_source(int M, int N, int O, float *x, float *s, float dt) {
-    dim3 threadsPerBlock(64, 8, 2);
-    dim3 numBlocks((M + threadsPerBlock.x - 1) / threadsPerBlock.x,
-                   (N + threadsPerBlock.y - 1) / threadsPerBlock.y,
-                   (O + threadsPerBlock.z - 1) / threadsPerBlock.z);
+    int threadsPerBlock = 256;
+    int numBlocks = (size + threadsPerBlock - 1) / threadsPerBlock;
 
     add_source_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, x, s, dt);
     cudaDeviceSynchronize();
@@ -302,17 +312,14 @@ void project(int M, int N, int O, float *u, float *v, float *w, float *p, float 
 }
 
 void dens_step(int M, int N, int O, float *x, float *x0, float *u, float *v, float *w, float diff, float dt) {
-    init_cuda_mallocs_dens(x, x0);
     add_source(M, N, O, d_x, d_x0, dt);
     SWAP(d_x0, d_x);
     diffuse(M, N, O, 0, d_x, d_x0, diff, dt);
     SWAP(d_x0, d_x);
     advect(M, N, O, 0, d_x, d_x0, v_u, v_v, v_w, dt);
-    free_cuda_mallocs_dens(x, x0, u, v, w);
 }
 
 void vel_step(int M, int N, int O, float *u, float *v, float *w, float *u0, float *v0, float *w0, float visc, float dt) {
-    init_cuda_mallocs_vel(M, N, O, u, v, w, u0, v0, w0);
     add_source(M, N, O, v_u, v_u0, dt);
     add_source(M, N, O, v_v, v_v0, dt);
     add_source(M, N, O, v_w, v_w0, dt);
@@ -330,5 +337,4 @@ void vel_step(int M, int N, int O, float *u, float *v, float *w, float *u0, floa
     advect(M, N, O, 2, v_v, v_v0, v_u0, v_v0, v_w0, dt);
     advect(M, N, O, 3, v_w, v_w0, v_u0, v_v0, v_w0, dt);
     project(M, N, O, v_u, v_v, v_w, v_u0, v_v0);
-    free_cuda_mallocs_vel(u, v, w, u0, v0, w0);
 }
