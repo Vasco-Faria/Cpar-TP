@@ -1,5 +1,6 @@
 #include "EventManager.h"
 #include "fluid_solver.h"
+#include <cuda_runtime.h>
 #include <iostream>
 #include <vector>
 
@@ -88,6 +89,8 @@ float sum_density() {
 
 // Simulation loop
 void simulate(EventManager &eventManager, int timesteps) {
+  init_cuda_mallocs_vel(M, N, O, u, v, w, u_prev, v_prev, w_prev);
+  init_cuda_mallocs_dens(dens, dens_prev);
   for (int t = 0; t < timesteps; t++) {
     // Get the events for the current timestep
     std::vector<Event> events = eventManager.get_events_at_timestamp(t);
@@ -95,10 +98,16 @@ void simulate(EventManager &eventManager, int timesteps) {
     // Apply events to the simulation
     apply_events(events);
 
+    cpy_host_to_device(u, v, w, dens);
+
     // Perform the simulation steps
     vel_step(M, N, O, u, v, w, u_prev, v_prev, w_prev, visc, dt);
     dens_step(M, N, O, dens, dens_prev, u, v, w, diff, dt);
+
+    cpy_device_to_host(u, v, w, dens);
   }
+  free_cuda_mallocs_vel(u, v, w, u_prev, v_prev, w_prev);
+  free_cuda_mallocs_dens(dens, dens_prev, u, v, w);
 }
 
 int main() {
