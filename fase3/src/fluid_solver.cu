@@ -12,6 +12,8 @@
 
 static int size;
 
+float* max_change = nullptr;
+
 float* v_u = nullptr;
 float* v_v = nullptr;
 float* v_w = nullptr;
@@ -38,6 +40,9 @@ void cpy_device_to_host(float* u, float* v, float* w, float* dens) {
 
 void init_cuda_mallocs_vel(int M, int N, int O, float* u, float* v, float* w, float* u0, float* v0, float* w0) {
     size = (M + 2) * (N + 2) * (O + 2) * sizeof(float);
+
+    cudaMallocManaged((void**)&max_change, size);
+
     cudaMallocManaged((void**)&v_u, size);
     cudaMallocManaged((void**)&v_v, size);
     cudaMallocManaged((void**)&v_w, size);
@@ -79,6 +84,8 @@ void free_cuda_mallocs_dens(float* x, float* x0, float* u, float* v, float* w) {
     cudaMemcpy(v, v_v, size, cudaMemcpyDeviceToHost);
     cudaMemcpy(w, v_w, size, cudaMemcpyDeviceToHost);
 
+    cudaFree(max_change);
+
     cudaFree(v_u);
     cudaFree(v_v);
     cudaFree(v_w);
@@ -91,9 +98,7 @@ __global__ void add_source_kernel(int M, int N, int O, float *x, float *s, float
     int i = blockIdx.x * blockDim.x + threadIdx.x + 1;
     int size_ = (M + 2) * (N + 2) * (O + 2);
 
-    if (i < size_) {
-        x[i] += dt * s[i];
-    }
+    if (i < size_) x[i] += dt * s[i];
 }
 
 void add_source(int M, int N, int O, float *x, float *s, float dt) {
@@ -173,7 +178,6 @@ __global__ void lin_solve_black_kernel(int M, int N, int O, int b, float* x, con
 
 void lin_solve(int M, int N, int O, int b, float* x, const float* x0, float a, float c) {
     float tol = 1e-7f;
-    float max_change;
 
     dim3 threadsPerBlock(64, 8, 2);
     dim3 numBlocks((M + threadsPerBlock.x - 1) / threadsPerBlock.x,
@@ -182,26 +186,20 @@ void lin_solve(int M, int N, int O, int b, float* x, const float* x0, float a, f
 
     float inv_c = 1.0f / c;
     int iterations = 0;
-
-    float* d_max_change;
-    cudaMallocManaged((void**)&d_max_change, sizeof(float));
     
     do {
-        max_change = 0.0f;
-        cudaMemcpy(d_max_change, &max_change, sizeof(float), cudaMemcpyHostToDevice);
+        *max_change = 0.0f;
 
-        lin_solve_red_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, b, x, x0, a, inv_c, d_max_change);
+        lin_solve_red_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, b, x, x0, a, inv_c, max_change);
         cudaDeviceSynchronize();
 
-        lin_solve_black_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, b, x, x0, a, inv_c, d_max_change);
+        lin_solve_black_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, b, x, x0, a, inv_c, max_change);
         cudaDeviceSynchronize();
-
-        cudaMemcpy(&max_change, d_max_change, sizeof(float), cudaMemcpyDeviceToHost);
 
         set_bnd_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, b, x);
         cudaDeviceSynchronize();
 
-    } while (max_change > tol && ++iterations < 20);
+    } while (*max_change > tol && ++iterations < 20);
 }
 
 void diffuse(int M, int N, int O, int b, float *x, float *x0, float diff, float dt) {
