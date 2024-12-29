@@ -21,9 +21,6 @@ float* v_w0 = nullptr;
 
 float* d_x = nullptr;
 float* d_x0 = nullptr;
-float* d_u = nullptr;
-float* d_v = nullptr;
-float* d_w = nullptr;
 
 void init_cuda_mallocs_vel(int M, int N, int O, float* u, float* v, float* w, float* u0, float* v0, float* w0) {
     size = (M + 2) * (N + 2) * (O + 2) * sizeof(float);
@@ -43,54 +40,58 @@ void init_cuda_mallocs_vel(int M, int N, int O, float* u, float* v, float* w, fl
 }
 
 void free_cuda_mallocs_vel(float* u, float* v, float* w, float* u0, float* v0, float* w0) {
-    cudaMemcpy(u, v_u, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(v, v_v, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(w, v_w, size, cudaMemcpyDeviceToHost);
     cudaMemcpy(u0, v_u0, size, cudaMemcpyDeviceToHost);
     cudaMemcpy(v0, v_v0, size, cudaMemcpyDeviceToHost);
     cudaMemcpy(w0, v_w0, size, cudaMemcpyDeviceToHost);
 
-    cudaFree(v_u);
-    cudaFree(v_v);
-    cudaFree(v_w);
     cudaFree(v_u0);
     cudaFree(v_v0);
     cudaFree(v_w0);
 }
 
-void init_cuda_mallocs_dens(float* x, float* x0, float* u, float* v, float* w) {
+void init_cuda_mallocs_dens(float* x, float* x0) {
     cudaMallocManaged((void**)&d_x, size);
     cudaMallocManaged((void**)&d_x0, size);
-    cudaMallocManaged((void**)&d_u, size);
-    cudaMallocManaged((void**)&d_v, size);
-    cudaMallocManaged((void**)&d_w, size);
 
     cudaMemcpy(d_x, x, size, cudaMemcpyHostToDevice);
     cudaMemcpy(d_x0, x0, size, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_u, u, size, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_v, v, size, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_w, w, size, cudaMemcpyHostToDevice);
 }
 
 void free_cuda_mallocs_dens(float* x, float* x0, float* u, float* v, float* w) {
     cudaMemcpy(x, d_x, size, cudaMemcpyDeviceToHost);
     cudaMemcpy(x0, d_x0, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(u, d_u, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(v, d_v, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(w, d_w, size, cudaMemcpyDeviceToHost);
+
+    cudaMemcpy(u, v_u, size, cudaMemcpyDeviceToHost);
+    cudaMemcpy(v, v_v, size, cudaMemcpyDeviceToHost);
+    cudaMemcpy(w, v_w, size, cudaMemcpyDeviceToHost);
+
+    cudaFree(v_u);
+    cudaFree(v_v);
+    cudaFree(v_w);
 
     cudaFree(d_x);
     cudaFree(d_x0);
-    cudaFree(d_u);
-    cudaFree(d_v);
-    cudaFree(d_w);
+}
+
+__global__ void add_source_kernel(int M, int N, int O, float *x, float *s, float dt) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    int j = blockIdx.y * blockDim.y + threadIdx.y;
+    int k = blockIdx.z * blockDim.z + threadIdx.z;
+
+    if (i < M && j < N && k < O) {
+        int index = IX(i, j, k);
+        x[index] += dt * s[index];
+    }
 }
 
 void add_source(int M, int N, int O, float *x, float *s, float dt) {
-    int size_ = (M + 2) * (N + 2) * (O + 2);
-    for (int i = 0; i < size_; i++) {
-        x[i] += dt * s[i];
-    }
+    dim3 threadsPerBlock(64, 8, 2);
+    dim3 numBlocks((M + threadsPerBlock.x - 1) / threadsPerBlock.x,
+                   (N + threadsPerBlock.y - 1) / threadsPerBlock.y,
+                   (O + threadsPerBlock.z - 1) / threadsPerBlock.z);
+
+    add_source_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, x, s, dt);
+    cudaDeviceSynchronize();
 }
 
 __global__ void set_bnd_kernel(int M, int N, int O, int b, float* x) {
@@ -301,20 +302,20 @@ void project(int M, int N, int O, float *u, float *v, float *w, float *p, float 
 }
 
 void dens_step(int M, int N, int O, float *x, float *x0, float *u, float *v, float *w, float diff, float dt) {
-    add_source(M, N, O, x, x0, dt);
-    init_cuda_mallocs_dens(x, x0, u, v, w);
+    init_cuda_mallocs_dens(x, x0);
+    add_source(M, N, O, d_x, d_x0, dt);
     SWAP(d_x0, d_x);
     diffuse(M, N, O, 0, d_x, d_x0, diff, dt);
     SWAP(d_x0, d_x);
-    advect(M, N, O, 0, d_x, d_x0, d_u, d_v, d_w, dt);
+    advect(M, N, O, 0, d_x, d_x0, v_u, v_v, v_w, dt);
     free_cuda_mallocs_dens(x, x0, u, v, w);
 }
 
 void vel_step(int M, int N, int O, float *u, float *v, float *w, float *u0, float *v0, float *w0, float visc, float dt) {
-    add_source(M, N, O, u, u0, dt);
-    add_source(M, N, O, v, v0, dt);
-    add_source(M, N, O, w, w0, dt);
     init_cuda_mallocs_vel(M, N, O, u, v, w, u0, v0, w0);
+    add_source(M, N, O, v_u, v_u0, dt);
+    add_source(M, N, O, v_v, v_v0, dt);
+    add_source(M, N, O, v_w, v_w0, dt);
     SWAP(v_u0, v_u);
     diffuse(M, N, O, 1, v_u, v_u0, visc, dt);
     SWAP(v_v0, v_v);
