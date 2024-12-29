@@ -67,12 +67,12 @@ void apply_events(const std::vector<Event> &events) {
   for (const auto &event : events) {
     if (event.type == ADD_SOURCE) {
       // Apply density source at the center of the grid
-      dens[ix] = event.density;
+      d_x[ix] = event.density;
     } else if (event.type == APPLY_FORCE) {
       // Apply forces based on the event's vector (fx, fy, fz);
-      u[ix] = event.force.x;
-      v[ix] = event.force.y;
-      w[ix] = event.force.z;
+      v_u[ix] = event.force.x;
+      v_v[ix] = event.force.y;
+      v_w[ix] = event.force.z;
     }
   }
 }
@@ -82,7 +82,7 @@ float sum_density() {
   float total_density = 0.0f;
   int size = (M + 2) * (N + 2) * (O + 2);
   for (int i = 0; i < size; i++) {
-    total_density += dens[i];
+    total_density += d_x[i];
   }
   return total_density;
 }
@@ -98,16 +98,12 @@ void simulate(EventManager &eventManager, int timesteps) {
     // Apply events to the simulation
     apply_events(events);
 
-    cpy_host_to_device(u, v, w, dens);
-
     // Perform the simulation steps
     vel_step(M, N, O, u, v, w, u_prev, v_prev, w_prev, visc, dt);
     dens_step(M, N, O, dens, dens_prev, u, v, w, diff, dt);
-
-    cpy_device_to_host(u, v, w, dens);
   }
-  free_cuda_mallocs_vel(u, v, w, u_prev, v_prev, w_prev);
-  free_cuda_mallocs_dens(dens, dens_prev, u, v, w);
+  free_cuda_mallocs_vel();
+  free_cuda_mallocs_dens();
 }
 
 int main() {
@@ -130,6 +126,8 @@ int main() {
   float total_density = sum_density();
   std::cout << "Total density after " << timesteps
             << " timesteps: " << total_density << std::endl;
+
+  cudaFree(d_x);
 
   // Free memory
   free_data();
