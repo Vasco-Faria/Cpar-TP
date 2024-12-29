@@ -2,7 +2,7 @@
 CPP = g++
 CUDA = nvcc
 CFLAGS = -Wall -Wextra -lm -march=native -funroll-loops -ffast-math -fopt-info -Ofast -ftree-vectorize -mavx
-CUDAFLAGS = -Xptxas -O3 -g -std=c++11 -arch=sm_35 -Wno-deprecated-gpu-targets -use_fast_math -restrict -dlcm=ca
+CUDAFLAGS = -Xptxas -O3 -g -std=c++11 -arch=sm_35 -Wno-deprecated-gpu-targets -use_fast_math -restrict
 
 # Source files and object files
 SRCS = src/main.cpp src/EventManager.cpp
