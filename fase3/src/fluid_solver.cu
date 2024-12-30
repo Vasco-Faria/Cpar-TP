@@ -84,32 +84,37 @@ void add_source(int M, int N, int O, float *x, float *s, float dt) {
 }
 
 __global__ void set_bnd_kernel(int M, int N, int O, int b, float* x) {
-    int i = blockIdx.x * blockDim.x + threadIdx.x;
-    int j = blockIdx.y * blockDim.y + threadIdx.y;
-    int k = blockIdx.z * blockDim.z + threadIdx.z;
+    const int i = blockIdx.x * blockDim.x + threadIdx.x;
+    const int j = blockIdx.y * blockDim.y + threadIdx.y;
+    const int k = blockIdx.z * blockDim.z + threadIdx.z;
 
-    if (i >= 1 && i <= M && j >= 1 && j <= N && k >= 1 && k <= O) {
-        // k = 0 and k = O+1
-        if (k == 0) x[IX(i, j, 0)] = (b == 3) ? -x[IX(i, j, 1)] : x[IX(i, j, 1)];
-        if (k == O + 1) x[IX(i, j, O + 1)] = (b == 3) ? -x[IX(i, j, O)] : x[IX(i, j, O)];
+    if (i > M + 1 || j > N + 1 || k > O + 1) return;
 
-        // i = 0 and i = M+1
-        if (i == 0) x[IX(0, j, k)] = (b == 1) ? -x[IX(1, j, k)] : x[IX(1, j, k)];
-        if (i == M + 1) x[IX(M + 1, j, k)] = (b == 1) ? -x[IX(M, j, k)] : x[IX(M, j, k)];
-
-        // j = 0 and j = N+1
-        if (j == 0) x[IX(i, 0, k)] = (b == 2) ? -x[IX(i, 1, k)] : x[IX(i, 1, k)];
-        if (j == N + 1) x[IX(i, N + 1, k)] = (b == 2) ? -x[IX(i, N, k)] : x[IX(i, N, k)];
-    }
+    if (k == 0)
+        x[IX(i, j, 0)] = b == 3 ? -x[IX(i, j, 1)] : x[IX(i, j, 1)];
+    else if (k == O + 1)
+        x[IX(i, j, O + 1)] = b == 3 ? -x[IX(i, j, O)] : x[IX(i, j, O)];
     
-    if (i == 0 && j == 0 && k == 0) 
-        x[IX(0, 0, 0)] = 0.33f * (x[IX(1, 0, 0)] + x[IX(0, 1, 0)] + x[IX(0, 0, 1)]);
-    if (i == M + 1 && j == 0 && k == 0) 
-        x[IX(M + 1, 0, 0)] = 0.33f * (x[IX(M, 0, 0)] + x[IX(M + 1, 1, 0)] + x[IX(M + 1, 0, 1)]);
-    if (i == 0 && j == N + 1 && k == 0) 
-        x[IX(0, N + 1, 0)] = 0.33f * (x[IX(1, N + 1, 0)] + x[IX(0, N, 0)] + x[IX(0, N + 1, 1)]);
-    if (i == M + 1 && j == N + 1 && k == 0) 
-        x[IX(M + 1, N + 1, 0)] = 0.33f * (x[IX(M, N + 1, 0)] + x[IX(M + 1, N, 0)] + x[IX(M + 1, N + 1, 1)]);
+    if (i == 0)
+        x[IX(0, j, k)] = b == 1 ? -x[IX(1, j, k)] : x[IX(1, j, k)];
+    else if (i == M + 1)
+        x[IX(M + 1, j, k)] = b == 1 ? -x[IX(M, j, k)] : x[IX(M, j, k)];
+    
+    if (j == 0)
+        x[IX(i, 0, k)] = b == 2 ? -x[IX(i, 1, k)] : x[IX(i, 1, k)];
+    else if (j == N + 1)
+        x[IX(i, N + 1, k)] = b == 2 ? -x[IX(i, N, k)] : x[IX(i, N, k)];
+
+    if (k == 0) {
+        if (i == 0 && j == 0)
+            x[IX(0, 0, 0)] = 0.33f * (x[IX(1, 0, 0)] + x[IX(0, 1, 0)] + x[IX(0, 0, 1)]);
+        else if (i == M + 1 && j == 0)
+            x[IX(M + 1, 0, 0)] = 0.33f * (x[IX(M, 0, 0)] + x[IX(M + 1, 1, 0)] + x[IX(M + 1, 0, 1)]);
+        else if (i == 0 && j == N + 1)
+            x[IX(0, N + 1, 0)] = 0.33f * (x[IX(1, N + 1, 0)] + x[IX(0, N, 0)] + x[IX(0, N + 1, 1)]);
+        else if (i == M + 1 && j == N + 1)
+            x[IX(M + 1, N + 1, 0)] = 0.33f * (x[IX(M, N + 1, 0)] + x[IX(M + 1, N, 0)] + x[IX(M + 1, N + 1, 1)]);
+    }
 }
 
 __global__ void lin_solve_red_kernel(int M, int N, int O, int b, float* x, const float* x0, float a, float inv_c, float* max_change) {
@@ -117,18 +122,18 @@ __global__ void lin_solve_red_kernel(int M, int N, int O, int b, float* x, const
     int j = blockIdx.y * blockDim.y + threadIdx.y + 1;
     int k = blockIdx.z * blockDim.z + threadIdx.z + 1;
 
-    if (i <= M && j <= N && k <= O) {
-        if ((i + j + k) % 2 == 1) { 
-            int index = IX(i, j, k);
-            float old_x = x[index];
-            x[index] = (x0[index] +
-                        a * (x[IX(i - 1, j, k)] + x[IX(i + 1, j, k)] +
-                             x[IX(i, j - 1, k)] + x[IX(i, j + 1, k)] +
-                             x[IX(i, j, k - 1)] + x[IX(i, j, k + 1)])) * inv_c;
-            float change = fabsf(x[index] - old_x);
-            if (change > *max_change) *max_change = change;
-        }
-    }
+    if (i > M || j > N || k > O) return;
+
+    if ((i + j + k) % 2 != 1) return;
+
+    int index = IX(i, j, k);
+    float old_x = x[index];
+    x[index] = (x0[index] +
+                a * (x[IX(i - 1, j, k)] + x[IX(i + 1, j, k)] +
+                        x[IX(i, j - 1, k)] + x[IX(i, j + 1, k)] +
+                        x[IX(i, j, k - 1)] + x[IX(i, j, k + 1)])) * inv_c;
+    float change = fabsf(x[index] - old_x);
+    if (change > *max_change) *max_change = change;
 }
 
 __global__ void lin_solve_black_kernel(int M, int N, int O, int b, float* x, const float* x0, float a, float inv_c, float* max_change) {
@@ -136,18 +141,18 @@ __global__ void lin_solve_black_kernel(int M, int N, int O, int b, float* x, con
     int j = blockIdx.y * blockDim.y + threadIdx.y + 1;
     int k = blockIdx.z * blockDim.z + threadIdx.z + 1;
 
-    if (i <= M && j <= N && k <= O) {
-        if ((i + j + k) % 2 == 0) { 
-            int index = IX(i, j, k);
-            float old_x = x[index];
-            x[index] = (x0[index] +
-                        a * (x[IX(i - 1, j, k)] + x[IX(i + 1, j, k)] +
-                             x[IX(i, j - 1, k)] + x[IX(i, j + 1, k)] +
-                             x[IX(i, j, k - 1)] + x[IX(i, j, k + 1)])) * inv_c;
-            float change = fabsf(x[index] - old_x);
-            if (change > *max_change) *max_change = change;
-        }
-    }
+    if (i > M || j > N || k > O) return;
+
+    if ((i + j + k) % 2 != 0) return;
+
+    int index = IX(i, j, k);
+    float old_x = x[index];
+    x[index] = (x0[index] +
+                a * (x[IX(i - 1, j, k)] + x[IX(i + 1, j, k)] +
+                        x[IX(i, j - 1, k)] + x[IX(i, j + 1, k)] +
+                        x[IX(i, j, k - 1)] + x[IX(i, j, k + 1)])) * inv_c;
+    float change = fabsf(x[index] - old_x);
+    if (change > *max_change) *max_change = change;
 }
 
 void lin_solve(int M, int N, int O, int b, float* x, const float* x0, float a, float c) {
@@ -183,7 +188,7 @@ void diffuse(int M, int N, int O, int b, float *x, float *x0, float diff, float 
 }
 
 __global__ void advect_kernel(int M, int N, int O, int b, float *d, float *d0, float *u, float *v, float *w, float dt) {
-    int i = blockIdx.x * blockDim.x + threadIdx.x + 1; // +1 para evitar bordas
+    int i = blockIdx.x * blockDim.x + threadIdx.x + 1;
     int j = blockIdx.y * blockDim.y + threadIdx.y + 1;
     int k = blockIdx.z * blockDim.z + threadIdx.z + 1;
 
@@ -192,15 +197,25 @@ __global__ void advect_kernel(int M, int N, int O, int b, float *d, float *d0, f
     int index = IX(i, j, k);
     float dtX = dt * M, dtY = dt * N, dtZ = dt * O;
 
-    float u_val = u[index], v_val = v[index], w_val = w[index];
-    float x = i - dtX * u_val, y = j - dtY * v_val, z = k - dtZ * w_val;
+    float u_val = u[index];
+    float v_val = v[index];
+    float w_val = w[index];
 
-    x = (x < 0.5f) ? 0.5f : (x > M + 0.5f) ? M + 0.5f : x;
-    y = (y < 0.5f) ? 0.5f : (y > N + 0.5f) ? N + 0.5f : y;
-    z = (z < 0.5f) ? 0.5f : (z > O + 0.5f) ? O + 0.5f : z;
+    float x = i - dtX * u_val;
+    float y = j - dtY * v_val;
+    float z = k - dtZ * w_val;
 
-    int i0 = (int)x, i1 = i0 + 1, j0 = (int)y, j1 = j0 + 1, k0 = (int)z, k1 = k0 + 1;
-    float s1 = x - i0, s0 = 1 - s1, t1 = y - j0, t0 = 1 - t1, u1 = z - k0, u0 = 1 - u1;
+    x = fmaxf(0.5f, fminf(x, M + 0.5f));
+    y = fmaxf(0.5f, fminf(y, N + 0.5f));
+    z = fmaxf(0.5f, fminf(z, O + 0.5f));
+
+    int i0 = (int)x, i1 = i0 + 1;
+    int j0 = (int)y, j1 = j0 + 1;
+    int k0 = (int)z, k1 = k0 + 1;
+
+    float s1 = x - i0, s0 = 1 - s1;
+    float t1 = y - j0, t0 = 1 - t1;
+    float u1 = z - k0, u0 = 1 - u1;
 
     d[index] = 
         s0 * (t0 * (u0 * d0[IX(i0, j0, k0)] + u1 * d0[IX(i0, j0, k1)]) + 
@@ -229,16 +244,16 @@ __global__ void compute_div_and_init_p(int M, int N, int O, float *u, float *v, 
     int j = blockIdx.y * blockDim.y + threadIdx.y + 1;
     int k = blockIdx.z * blockDim.z + threadIdx.z + 1;
 
-    if (i <= M && j <= N && k <= O) {
-        int index = IX(i, j, k);
-        div[index] = -0.5f * (
-            u[IX(i + 1, j, k)] - u[IX(i - 1, j, k)] +
-            v[IX(i, j + 1, k)] - v[IX(i, j - 1, k)] +
-            w[IX(i, j, k + 1)] - w[IX(i, j, k - 1)]
-        ) * inverso_MNO;
+    if (i > M || j > N || k > O) return;
 
-        p[index] = 0.0f;
-    }
+    int index = IX(i, j, k);
+    div[index] = -0.5f * (
+        u[IX(i + 1, j, k)] - u[IX(i - 1, j, k)] +
+        v[IX(i, j + 1, k)] - v[IX(i, j - 1, k)] +
+        w[IX(i, j, k + 1)] - w[IX(i, j, k - 1)]
+    ) * inverso_MNO;
+
+    p[index] = 0.0f;
 }
 
 __global__ void update_velocities(int M, int N, int O, float *u, float *v, float *w, float *p) {
@@ -246,12 +261,12 @@ __global__ void update_velocities(int M, int N, int O, float *u, float *v, float
     int j = blockIdx.y * blockDim.y + threadIdx.y + 1;
     int k = blockIdx.z * blockDim.z + threadIdx.z + 1;
 
-    if (i <= M && j <= N && k <= O) {
-        int index = IX(i, j, k);
-        u[index] -= 0.5f * (p[IX(i + 1, j, k)] - p[IX(i - 1, j, k)]);
-        v[index] -= 0.5f * (p[IX(i, j + 1, k)] - p[IX(i, j - 1, k)]);
-        w[index] -= 0.5f * (p[IX(i, j, k + 1)] - p[IX(i, j, k - 1)]);
-    }
+    if (i > M || j > N || k > O) return;
+
+    int index = IX(i, j, k);
+    u[index] -= 0.5f * (p[IX(i + 1, j, k)] - p[IX(i - 1, j, k)]);
+    v[index] -= 0.5f * (p[IX(i, j + 1, k)] - p[IX(i, j - 1, k)]);
+    w[index] -= 0.5f * (p[IX(i, j, k + 1)] - p[IX(i, j, k - 1)]);
 }
 
 void project(int M, int N, int O, float *u, float *v, float *w, float *p, float *div) {dim3 threadsPerBlock(64, 8, 2);
