@@ -71,14 +71,13 @@ void free_cuda_mallocs_dens() {
 __global__ void add_source_kernel(int M, int N, int O, float *x, float *s, float dt) {
     int i = blockIdx.x * blockDim.x + threadIdx.x + 1;
     int size_ = (M + 2) * (N + 2) * (O + 2);
-
     if (i < size_) x[i] += dt * s[i];
 }
 
 void add_source(int M, int N, int O, float *x, float *s, float dt) {
     int threadsPerBlock = 256;
-    int numBlocks = (size + threadsPerBlock - 1) / threadsPerBlock;
-
+    int size_ = (M + 2) * (N + 2) * (O + 2);
+    int numBlocks = (size_ + threadsPerBlock - 1) / threadsPerBlock;
     add_source_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, x, s, dt);
     cudaDeviceSynchronize();
 }
@@ -217,11 +216,17 @@ __global__ void advect_kernel(int M, int N, int O, int b, float *d, float *d0, f
     float t1 = y - j0, t0 = 1 - t1;
     float u1 = z - k0, u0 = 1 - u1;
 
-    d[index] = 
-        s0 * (t0 * (u0 * d0[IX(i0, j0, k0)] + u1 * d0[IX(i0, j0, k1)]) + 
-              t1 * (u0 * d0[IX(i0, j1, k0)] + u1 * d0[IX(i0, j1, k1)])) +
-        s1 * (t0 * (u0 * d0[IX(i1, j0, k0)] + u1 * d0[IX(i1, j0, k1)]) + 
-              t1 * (u0 * d0[IX(i1, j1, k0)] + u1 * d0[IX(i1, j1, k1)]));
+    int i0_j0_k0 = IX(i0, j0, k0);
+    int i0_j0_k1 = IX(i0, j0, k1);
+    int i0_j1_k0 = IX(i0, j1, k0);
+    int i0_j1_k1 = IX(i0, j1, k1);
+    int i1_j0_k0 = IX(i1, j0, k0);
+    int i1_j0_k1 = IX(i1, j0, k1);
+    int i1_j1_k0 = IX(i1, j1, k0);
+    int i1_j1_k1 = IX(i1, j1, k1);
+
+    d[index] = s0 * (t0 * (u0 * d0[i0_j0_k0] + u1 * d0[i0_j0_k1]) + t1 * (u0 * d0[i0_j1_k0] + u1 * d0[i0_j1_k1])) +
+               s1 * (t0 * (u0 * d0[i1_j0_k0] + u1 * d0[i1_j0_k1]) + t1 * (u0 * d0[i1_j1_k0] + u1 * d0[i1_j1_k1]));
 }
 
 void advect(int M, int N, int O, int b, float *d, float *d0, float *u, float *v, float *w, float dt) {
