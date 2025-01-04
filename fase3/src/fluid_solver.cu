@@ -274,7 +274,8 @@ __global__ void update_velocities(int M, int N, int O, float *u, float *v, float
     w[index] -= 0.5f * (p[IX(i, j, k + 1)] - p[IX(i, j, k - 1)]);
 }
 
-void project(int M, int N, int O, float *u, float *v, float *w, float *p, float *div) {dim3 threadsPerBlock(64, 8, 2);
+void project(int M, int N, int O, float *u, float *v, float *w, float *p, float *div) {
+    dim3 threadsPerBlock(64, 8, 2);
     dim3 numBlocks((M + threadsPerBlock.x - 1) / threadsPerBlock.x,
                    (N + threadsPerBlock.y - 1) / threadsPerBlock.y,
                    (O + threadsPerBlock.z - 1) / threadsPerBlock.z);
@@ -297,7 +298,6 @@ void project(int M, int N, int O, float *u, float *v, float *w, float *p, float 
     cudaDeviceSynchronize();
 
     set_bnd_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, 2, v);
-    cudaDeviceSynchronize();
 
     set_bnd_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, 3, w);
     cudaDeviceSynchronize();
