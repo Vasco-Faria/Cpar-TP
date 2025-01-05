@@ -174,7 +174,7 @@ void lin_solve(int M, int N, int O, int b, float* x, const float* x0, float a, f
         lin_solve_black_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, b, x, x0, a, inv_c, max_change);
         cudaDeviceSynchronize();
 
-        set_bnd_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, b, x);
+        set_bnd_kernel<<<numBlocks, (16,8,8)>>>(M, N, O, b, x);
         cudaDeviceSynchronize();
 
     } while (*max_change > tol && ++iterations < 20);
@@ -238,7 +238,7 @@ void advect(int M, int N, int O, int b, float *d, float *d0, float *u, float *v,
     advect_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, b, d, d0, u, v, w, dt);
     cudaDeviceSynchronize();
 
-    set_bnd_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, b, d);
+    set_bnd_kernel<<<numBlocks, (16,8,8)>>>(M, N, O, b, d);
     cudaDeviceSynchronize();
 }
 
@@ -283,10 +283,10 @@ void project(int M, int N, int O, float *u, float *v, float *w, float *p, float 
     compute_div_and_init_p<<<numBlocks, threadsPerBlock>>>(M, N, O, u, v, w, p, div);
     cudaDeviceSynchronize();
 
-    set_bnd_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, 0, div);
+    set_bnd_kernel<<<numBlocks, (16,8,8)>>>(M, N, O, 0, div);
     cudaDeviceSynchronize();
 
-    set_bnd_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, 0, p);
+    set_bnd_kernel<<<numBlocks, (16,8,8)>>>(M, N, O, 0, p);
     cudaDeviceSynchronize();
 
     lin_solve(M, N, O, 0, p, div, 1 ,6);
@@ -294,12 +294,12 @@ void project(int M, int N, int O, float *u, float *v, float *w, float *p, float 
     update_velocities<<<numBlocks, threadsPerBlock>>>(M, N, O, u, v, w, p);
     cudaDeviceSynchronize();
 
-    set_bnd_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, 1, u);
+    set_bnd_kernel<<<numBlocks, (16,8,8)>>>(M, N, O, 1, u);
     cudaDeviceSynchronize();
 
-    set_bnd_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, 2, v);
+    set_bnd_kernel<<<numBlocks, (16,8,8)>>>(M, N, O, 2, v);
 
-    set_bnd_kernel<<<numBlocks, threadsPerBlock>>>(M, N, O, 3, w);
+    set_bnd_kernel<<<numBlocks, (16,8,8)>>>(M, N, O, 3, w);
     cudaDeviceSynchronize();
 }
 
